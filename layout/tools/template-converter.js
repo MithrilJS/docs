@@ -1,5 +1,5 @@
 /* global m: false */
-// NTBD: ensure this targets the current API.
+// TODO: ensure this targets the current API.
 window.templateConverter = (function () {
 	"use strict"
 
