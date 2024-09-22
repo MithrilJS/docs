@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=UTF-8>
+<title>Mithril.js</title>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel=stylesheet>
+<link href=https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.min.css rel=stylesheet>
+<link href=style.css rel=stylesheet>
+<link rel=icon type=image/png sizes=32x32 href=favicon.png>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="Documentation on the special &quot;key&quot; attribute in Mithril.js, which tracks vnodes&#39; identities">
+</head>
+<body onload="window.requestAnimationFrame(function(){document.getElementById('archive-docs').selectedIndex = 0})" /* handle back navigation */>
+<header>
+<section>
+<a class=hamburger href=javascript:;>≡</a>
+<h1><img src=logo.svg> Mithril <select id=archive-docs onchange="location.href='/archive/' + this.value + '/index.html'"><option>v2.2.1<option>v2.2.0<option>v2.0.4<option>v2.0.3<option>v2.0.2<option>v2.0.1<option>v2.0.0-rc.9<option>v2.0.0-rc.8<option>v2.0.0-rc.7<option>v2.0.0-rc.6<option>v2.0.0-rc.5<option>v2.0.0-rc.4<option>v2.0.0-rc.3<option>v2.0.0-rc.1<option>v2.0.0-rc.0<option>v1.1.7<option>v1.1.6<option>v1.1.5<option>v1.1.4<option>v1.1.3<option>v1.1.2<option>v1.1.1<option>v1.1.0-rc.1<option>v1.1.0<option>v1.0.1<option>v1.0.0<option>v0.2.5<option>v0.2.4<option>v0.2.3<option>v0.2.2-rc.1<option>v0.2.1<option>v0.2.0<option>v0.1.9<option>v0.1.8<option>v0.1.7<option>v0.1.6<option>v0.1.5<option>v0.1.4<option>v0.1.34<option>v0.1.33<option>v0.1.32<option>v0.1.31<option>v0.1.30<option>v0.1.3<option>v0.1.29<option>v0.1.28<option>v0.1.27<option>v0.1.26<option>v0.1.25<option>v0.1.24<option>v0.1.23<option>v0.1.22<option>v0.1.21<option>v0.1.20<option>v0.1.2<option>v0.1.19<option>v0.1.18<option>v0.1.17<option>v0.1.16<option>v0.1.15<option>v0.1.14<option>v0.1.13<option>v0.1.12<option>v0.1.11<option>v0.1.10<option>v0.1.1<option>v0.1</select></h1>
+<nav>
+<a href=index.html>Guide</a>
+<a href=api.html>API</a>
+<a href=https://mithril.zulipchat.com/ >Chat</a>
+<a href=https://github.com/MithrilJS/mithril.js>GitHub</a>
+</nav>
+</section>
+</header>
+<main>
+<section>
+<h1 id=keys><a href=#keys>Keys</a></h1>
+<ul>
+<li>Getting Started<ul>
+<li><a href=index.html>Introduction</a></li>
+<li><a href=installation.html>Installation</a></li>
+<li><a href=simple-application.html>Tutorial</a></li>
+<li><a href=learning-mithril.html>Learning Resources</a></li>
+<li><a href=support.html>Getting Help</a></li>
+</ul>
+</li>
+<li>Resources<ul>
+<li><a href=jsx.html>JSX</a></li>
+<li><a href=es6.html>ES6+ on legacy browsers</a></li>
+<li><a href=animation.html>Animation</a></li>
+<li><a href=testing.html>Testing</a></li>
+<li><a href=examples.html>Examples</a></li>
+<li><a href=integrating-libs.html>3rd Party Integration</a></li>
+<li><a href=paths.html>Path Handling</a></li>
+</ul>
+</li>
+<li>Key concepts<ul>
+<li><a href=vnodes.html>Vnodes</a></li>
+<li><a href=components.html>Components</a></li>
+<li><a href=lifecycle-methods.html>Lifecycle methods</a></li>
+<li><strong><a href=keys.html>Keys</a></strong><ul>
+<li><a href=#what-are-keys?>What are keys?</a><ul>
+<li><a href=#key-restrictions>Key restrictions</a></li>
+</ul>
+</li>
+<li><a href=#linking-model-data-to-views>Linking model data in lists of views</a></li>
+<li><a href=#keeping-collections-of-animated-objects-glitch-free>Keeping collections of animated objects glitch-free</a></li>
+<li><a href=#reinitializing-views-with-single-child-keyed-fragments>Reinitializing views with single-child keyed fragments</a></li>
+<li><a href=#common-gotchas>Common gotchas</a><ul>
+<li><a href=#wrapping-keyed-elements>Wrapping keyed elements</a></li>
+<li><a href=#putting-keys-inside-the-component>Putting keys inside the component</a></li>
+<li><a href=#keying-elements-unnecessarily>Keying elements unnecessarily</a></li>
+<li><a href=#mixing-key-types>Mixing key types</a></li>
+<li><a href=#hiding-keyed-elements-with-holes>Hiding keyed elements with holes</a></li>
+<li><a href=#duplicate-keys>Duplicate keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href=autoredraw.html>Autoredraw system</a></li>
+</ul>
+</li>
+<li>Social<ul>
+<li><a href=https://github.com/MithrilJS/mithril.js/wiki/JOBS>Mithril.js Jobs</a></li>
+<li><a href=contributing.html>How to contribute</a></li>
+<li><a href=credits.html>Credits</a></li>
+<li><a href=code-of-conduct.html>Code of Conduct</a></li>
+</ul>
+</li>
+<li>Misc<ul>
+<li><a href=framework-comparison.html>Framework comparison</a></li>
+<li><a href=changelog.html>Change log/Migration</a></li>
+<li><a href=https://mithril.js.org/archive/v1.1.7/ >v1 Documentation</a></li>
+<li><a href=https://mithril.js.org/archive/v0.2.5/ >v0.2 Documentation</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id=what-are-keys?><a href=#what-are-keys?>What are keys?</a></h3>
+<p>Keys represent tracked identities. You can add them to <a href=vnodes.html>element, component, and fragment vnodes</a> via the magic <code>key</code> attribute, and they look something like this when used:</p>
+<pre><code class=language-javascript>m(&quot;.user&quot;, {key: user.id}, [/* ... */])
+</code></pre>
+<p>They are useful in a few scenarios:</p>
+<ul>
+<li>When you&#39;re rendering model data or other stateful data, you need keys to keep the local state tied to the right subtree.</li>
+<li>When you&#39;re independently animating multiple adjacent nodes using CSS and you could remove any one of them individually, you need keys to ensure the animations stick with the elements and don&#39;t end up unexpectedly jumping to other nodes.</li>
+<li>When you need to reinitialize a subtree on command, you need to add a key and then change it and redraw whenever you want to reinitialize it.</li>
+</ul>
+<h4 id=key-restrictions><a href=#key-restrictions>Key restrictions</a></h4>
+<p><strong>Important:</strong> For all fragments, their children must contain either exclusively vnodes with key attributes (keyed fragment) or exclusively vnodes without key attributes (unkeyed fragment). Key attributes can only exist on vnodes that support attributes in the first place, namely <a href=vnodes.html>element, component, and fragment vnodes</a>. Other vnodes, like <code>null</code>, <code>undefined</code>, and strings, can&#39;t have attributes of any kind, so they can&#39;t have key attributes and thus cannot be used in keyed fragments.</p>
+<p>What this translates to is stuff like <code>[m(&quot;.foo&quot;, {key: 1}), null]</code> and <code>[&quot;foo&quot;, m(&quot;.bar&quot;, {key: 2})]</code> won&#39;t work, but <code>[m(&quot;.foo&quot;, {key: 1}), m(&quot;.bar&quot;, {key: 2})]</code> and <code>[m(&quot;.foo&quot;), null]</code> will. If you forget this, you&#39;ll get a very helpful error explaining this.</p>
+<h3 id=linking-model-data-in-lists-of-views><a href=#linking-model-data-in-lists-of-views>Linking model data in lists of views</a></h3>
+<p>When you&#39;re rendering lists, especially editable list, you&#39;re often dealing with things like editable TODOs and such. These have state and identities, and you have to give Mithril.js the information it needs to track them.</p>
+<p>Suppose we have a simple social media post listing, where you can comment on posts and where you can hide posts for reasons like reporting them.</p>
+<pre><code class=language-javascript>// `User` and `ComposeWindow` omitted for brevity
+function CommentCompose() {
+    return {
+        view: function(vnode) {
+            var post = vnode.attrs.post
+            return m(ComposeWindow, {
+                placeholder: &quot;Write your comment...&quot;,
+                submit: function(text) {
+                    return Model.addComment(post, text)
+                },
+            })
+        }
+    }
+}
+
+function Comment() {
+    return {
+        view: function(vnode) {
+            var comment = vnode.attrs.comment
+            return m(&quot;.comment&quot;,
+                m(User, {user: comment.user}),
+                m(&quot;.comment-body&quot;, comment.text),
+                m(&quot;a.comment-hide&quot;,
+                    {onclick: function() {
+                        Model.hideComment(comment).then(m.redraw)
+                    }},
+                    &quot;I don&#39;t like this&quot;
+                )
+            )
+        }
+    }
+}
+
+function PostCompose() {
+    return {
+        view: function(vnode) {
+            var comment = vnode.attrs.comment
+            return m(ComposeWindow, {
+                placeholder: &quot;Write your post...&quot;,
+                submit: Model.createPost,
+            })
+        }
+    }
+}
+
+function Post(vnode) {
+    var showComments = false
+    var commentsFetched = false
+
+    return {
+        view: function(vnode) {
+            var post = vnode.attrs.post
+            var comments = showComments ? Model.getComments(post) : null
+            return m(&quot;.post&quot;,
+                m(User, {user: post.user}),
+                m(&quot;.post-body&quot;, post.text),
+                m(&quot;.post-meta&quot;,
+                    m(&quot;a.post-comment-count&quot;,
+                        {onclick: function() {
+                            if (!showComments &amp;&amp; !commentsFetched) {
+                                commentsFetched = true
+                                Model.fetchComments(post).then(m.redraw)
+                            }
+                            showComments = !showComments
+                        }},
+                        post.commentCount, &quot; comment&quot;,
+                        post.commentCount === 1 ? &quot;&quot; : &quot;s&quot;,
+                    ),
+                    m(&quot;a.post-hide&quot;,
+                        {onclick: function() {
+                            Model.hidePost(post).then(m.redraw)
+                        }},
+                        &quot;I don&#39;t like this&quot;
+                    )
+                ),
+                showComments ? m(&quot;.post-comments&quot;,
+                    comments == null
+                    ? m(&quot;.comment-list-loading&quot;, &quot;Loading...&quot;)
+                    : [
+                        m(&quot;.comment-list&quot;, comments.map(function(comment) {
+                            return m(Comment, {comment: comment})
+                        })),
+                        m(CommentCompose, {post: post}),
+                    ]
+                ) : null
+            )
+        }
+    }
+}
+
+function Feed() {
+    Model.fetchPosts().then(m.redraw)
+    return {
+        view: function() {
+            var posts = Model.getPosts()
+            return m(&quot;.feed&quot;,
+                m(&quot;h1&quot;, &quot;Feed&quot;),
+                posts == null ? m(&quot;.post-list-loading&quot;, &quot;Loading...&quot;)
+                : m(&quot;.post-view&quot;,
+                    m(PostCompose),
+                    m(&quot;.post-list&quot;, posts.map(function(post) {
+                        return m(Post, {post: post})
+                    }))
+                )
+            )
+        }
+    }
+}
+</code></pre>
+<p>It encapsulates a lot of functionality as you can tell, but I&#39;d like to zoom into two things:</p>
+<pre><code class=language-javascript>// In the `Feed` component
+m(&quot;.post-list&quot;, posts.map(function(post) {
+    return m(Post, {post: post})
+}))
+
+// In the `Post` component
+m(&quot;.comment-list&quot;, comments.map(function(comment) {
+    return m(Comment, {comment: comment})
+}))
+</code></pre>
+<p>Each of these refers to a subtree with associated state Mithril.js has no idea about. (Mithril.js only knows about vnodes, nothing else.) When you leave those unkeyed, things can and will get weird and unexpected. In this case, try clicking on the &quot;N comments&quot; to show the comments, typing into the comment compose box at the bottom of it, then clicking &quot;I don&#39;t like this&quot; on a post above it. <a href="https://flems.io/#0=N4Igxg9gdgzhA2BTEAucD4EMAONEBMQAaEGMAJw1QG0AGIgZgCYB2AXRIDMBLJGG0FEwBbZGgB0ACwAuw+MXRRpiJahAgAvkUEixIYRHyJ44gFb8SkJSulqAOiACueAAQxp5bmGkO7UPwBumOQuALKGxi4AvC4AFJyOUN7c0LEAlC7AfnbSQSFgmGCSiNEuAPIARqaI3uIUiJjKsVCO8PBp2T7+0glJ0ilQLgVFBLEA1ogAnkQu3FDc0hlZ3TnkiNKO5IPDxdQTk2wuAIQxLW0uAPxDhbv7hyhxO4h7U4cxcwvpHd0a2d29yWgLmEmAmAFU8OR0plOjk8i5nIhyAA5XSlTigpHiObKLbrcSIlG6dKwjzrTbbG6jByElAOFwAagRkNRohmAP6qSWpJyAHpeS4AJJGTBtaZCgDk+Bcpmc0mZJXgEDWwmw3AAHpF8Nw1t54OKKo55QsXPgIIgYFAJfKYI5sNhlV0cs7pPyXAAJAAqnoACgBlcQuP0QWawZSYfAzQUuSQRlzSEMAd08ymBkxcEETgwAjo4vGMXMj1vBuJx05CAl5EDzXQKEy5E8qC8EIIlpSbMFB20l4I4jC5sJRsEiXABhMoAJT9MYaRnIMDpKx8tZj0mkuBQ-IA5gtJI4KnUIMJedwYNxMJJRBHMzBeUqVWrNfAALSQefPwcQdWTGvw7jCLcwXIeBSgcGR1wXfljEQLdO2kZ9k24LcZGfTAABZMAAVkQNDxCgYtS0mQ9jzwgiy15DkBlvNZcwtHwQD+F1VnJLZgXEGjHDo2J-0A4CZmWJjlwqQoxi3Sg2weDxOKIGtmJgB1YEQT1JmHB4HAqJUKgcGSlxyDQ0nEaRiigeJEkBEyNIgCpuV05c1g2ViBOXQTuHwB5HDzfBxACND0h0wSXUJVlEHclldH85zIsJH0vAckKXDBCcABk6jWRpEEqapvESpLYks6yIsE35bP00lSp+RiejMzlBhBcFIRgWJIESRYYSXeFCRgUpqDYUlOGVOI-1KWgAG5ZhcAAeIZWyUMbuAZBkMk68RsGcSRYjqxAISRL5SXsikXB9ShhFPRBxFFeBYk6749Mq+EwE2NYlG28gZgddwYEqyigU4dYihe6EnOYhzKRGfBYhpSFtJcb6TJswT9tYzaAYMoyVFMvoBiuyF4cinIHvIJ7pBe0pCRrcqXQp6Ris6WGYb+yQfQgD7Ab2ljQeKcGHHe6RPuIGHqqx3GXUR2rMRexqMQmch2M7M1hDwxxhAqHbgBOqAHgARhmEF1QeJhaH0m68ekQzjIx8zYhLdxhZNnmupia3TZBbALZq7GkVtgKyRBtrvZctyEU87zfLSQqTcCyFQqRcP-bXRB1WkB4paxe9EAV5RE782STcgYRRCUUcZqTmHMRl8g5aPRXldV9WHnoYFMD1lwGENsOc8pjvqeNoqe+7zoae6e6jwL3nSkympTfqdLmladovsFn6GaL-ObEannbdF64wYhkAebpEBGQHZnTdc9lF7hv3Iq35GGtiHniNHouWtR83Yat09WqByK89HmBqAfq5N4LgnbiBdm7LGhIvbX3ZlfOOrl3LBx8tnWyglaQKlel3HImcS4pxlmnDOCdpAoLjjTE2VNKZ9ypoPHIdMVQQACIgAAQpMYUH93AzAWOnW2w8WrDT6gNWIQ0YijXGlNUBSAoBbiMnNBa0DSxxCdtQbgbBsTShOO8ZQCtXIZCUc1JQC1gFKJUWVUkEiVDSMkKUfRTo7KwPwomQ6x1ToQNSGsOA8BGFLDcOsT0-5ECtmIe4hAjCZiYVoLQDI1DKpb2-r9aQ-0o70wSZIF64d4lFCZh9ZODMsm83ScvEea8ckpJXn-WOS4tzrBesnC+rNbJbwJkTF6ZUKkuiqdIPJC4BaYy5HAuxvt7bHFOHPS4x8PriBgCWMAiBoQPDOPAVplV8ZpWUHk2pvSTI4OgVvDJqTITpDNujd+0Ccj2xWmtWI38A6INciHEhEcNhJKaTYNJXccGSSIbHH+RTC7F3rt8vSfcgVLP8EuSQrlEDrJ6ZbDe-TgYHXoYwlhbD7ZvRPlQ-ylT1hlOKTC92cLrk+wOr-NeACT5qMOCcFwCyxmkqUP-QB+BVFTKrHMmlc9QWkgjPgXFSgNmwpPjMbZ8LiWsSOkeU6502ixGoDnPZKNAU9EKavBl98MU1jYK-Y5dTTkJN+bzcl7hKUXJgOtIlLoEFBzucg9uqDlzoJec9SESrsFEM+YnJVFDlzeq0MsoykK+W4LqYSmsW8kXMNYeDelhqmUcHGYsLl1M-D6XSAoPASBzL8DQJrTCKBMIAE5NDaBAEIUQagzAWEUMoVQaBIYlHcJ4bwvgwV0xRlfWJpJKyIETAK92AQoARGgR1SEpQB0RHOmuecBIoYNNgcIXeM6kTaRzguhwS7yAflipsas-M10gB4tDYAMByBgGjjLaK261hGyVfujdz4y27pmA4AAAtDQkG7gp2sElQgeKa-h0xXu9RAAB1OYZpEz1LhMENw+4TprjmFudEoo8CdHhDgzh8x+iindIgJCMhOidvatwHtfasbjqMMOmDPMx2DqMJOjwMAVonzDfOxdedgMrvtfunBwQGhcbjhayK2oYCYA0gQB4toKjwf6FImYQRezxQw1ghMSRVnxXfhRxAeqXJYfPPAXD+H5QxAZImcDmZxAdKA0aAgfppCTCQEIujZ15YGWKEZyZ0zZkN2fEwYFjytPiHlpM+zSApB4eQsZlwDhMBGggC2uOLpAvBfcA5s67nIulFCI0SQYCm7cT0zhiLMh5POaC1XMglA2iGcixkJk3N1QJceXpV1y5oBzFWsGzZsREABB05FHBpReuGWCB07yopOIqZyMN6Qo38SpbCxlmQoEQCxYTE1xLygAgjfIGNhb6XitRey0ZPL6oCsLH0zVkrLgZtzdNpVjAV3Wr1b3o1hi9rKatbOVgGZkgEBzgeIFxojGVo-cQH9+Ac5Wt+vtd+k2d6OPM0QM+KT8Hob7sNGuaAAnHnAGgGAaZYwyN9KEy6VHCxZNIZiFJasH3lxA6nUx8nxDtlHJMic0V3tmeU+Q-AVDdOXQKzWPgCukH-O9xU4NmIvh3ukJh4lkAeSNuRTSP539FUoCD0AwaoDSOoNisGN-btvb8Xkec1RkINGYgM5BzzVjvsF267wGBrsmZ+I52wGDiHAPosgBAymEokxWz5ANeIMPOPBLM+J1soh-Wt7hCMCYHlQb1UcPjLHnO8vIq+r-ZrgDF8xwGv10RpLJGTeafN6K4eqqos2+nTG+3B0EcGoj5FBdaTMiOtD4SfSt72MGufBUQwP5+YxsMrHvvMXH42GfBCowrfBJ457PmaP+u44J+MFIQNReY3apMkLggovxc+qz-7EA0YzRWnlCWCY8YIV8xzmr0xGutcF7yU72ZuMS-07L6vrTFvpoa9aMJ1gd68W850HdYgP8XcIN3d7VPdChwd-skQ1I-cA8XAg9NgE0w9xAF9lwo8wgIgTBp41khVyZ1dbo89W038T4nMh0r54QzVMwg0HZS4+dadoMQ8a8YAAAxBmAgXnfnQjWBI3X-U3VIf-KvajE+YA+jUApjO3WyavP+UoJgxMFgsZDfEwKzA1deDFFweZTlCApvRdO3YgVdWIDvYAdBB+HvOHQSO9HmQfYfaGB+bZSfEAZjdwZ8UQWbPAwXXeTALw+CGNV8YufwyKJfAnFfcQy+UnSKBRWII4NQjQgAMlSOOBjV4P4PwH60EiyL4JSQEOp3IEmwF0ii0PED2RYNT0WDZw2nYkP0wETGPyKim15j+3UN0NKGSM6JYJUw0FP0eQfhjWfiUGfUPgb3MPKJGJ12LmiCiBiE1jGRlwMN9z5la3sPh0COCNn0hQiJdCiMJ1XzyOXEqLnyhVoI3nqIPxF2aNaJPy+3ogv2gGtBAW4FvwDQfzp2Py2LJz6O6KuEcJPjCO4IOP1W4IWI5TaC7iBP7xr2fCdkRIgAjEQ2hgcCShRO1CkRwIcAeIeDlXKObwRKdmhiyLy1dnfl305xNhvigINX4hjQeBjW9W9hvRU0dzmNVCR34n3gTV7y7l6lhzWIWRrAoOTSoL8Dpj4NGFxkqL2S6UOTRn30aLuJaOEN9lENI1iLX3p2kI+iyyIMs3WEVP8zpPXV+gIAiP3UkE1nRJABlPwDxKVSGUWOhJAjhPXScKRKVFRKkXtMxL9K3FxJAGPweGBO8ON3BIXXfyPGAz+Lb1MJBNJP5nOXAXflDXKLpLyV5JPgeB5lZOz1V0fzFOf0oMHgVgMBaliDNAelHnECH3wHFEdLSHTWgizTUE1mYBQCYAADZi0dBy0JAwAYAq0rAa1bA0BGz0xlgXAYZoB4IMQTp9QHgABBTwUUGYUTWAFHJEUsEaf9MFDdNqOckTBAyYZOJAdUA8wYFwUUJCKAZ8LhYQbpGZawcgG8weYIlwY82cxuXbOYZwrHYQeucQbCYQT8v4e9NUbwHdE8-8ncR8zwSLUC8CyCo8wkLdWCtYWYACeCpbEuBgdOG8ucofcgOcZ8CubUZwB4IiiCw8vwYImYYiYDeCsin3TWbAdUNwBAVyFwDSESEi-i5UCiqi7gGilwTWYivwOc7AHlRDLWaS28kEACx8hMbAUClgNChiqAFipHdPROPjTANikSlAmlaARAIS9xbgAAL3ikHXwiEoYSRE4CVBNznyMCgCErM3wCMi1giQAFIhKCLaKlLTzTxzyHhLIwAxghL+olAUdbL4opL6LJTdLEc8AUc4MTQ-ycFUISwtwNYXBkKZB0LGKMqShMdVN4L4r4Izw7LFLUrSLTLN0xKJKmAwrhLyKzKHLLKZL+KRIxIZpA4ABiWgTAFgISyAe8B4EazgeaoSuS-AbErcVC9OSSzqs8rAC80MEsfCQfJUGKsq3Spw3w4yv8razAHa1yhOIS2UdwQiMI6wflNwOSmZQfdYRMRAFQISlSxC58dSzS7S282qxKhqlwWgcQAADiUq-NOvWGMoAD4XAAAqI+NGv8v6wCpATgEuFK463Y0ImxZipwi45i0Ii4ky7q8geZCyxa+SqReuOKhcsG5Kzq0G-bB4BYe8sAKazYOAGm4+HEJEAmpwom-5P7RhTBE6kEi4lASWmOcqgfOWhWkIP86a5UWaqG7W0WkErI+CrGtSiADSiGsC2Gv4F9BCRACoMYBYZ8fYTgCuUQLqTsf8dKQMla+C2gAKzIaaZ6kuDErEtEkAMaYqOcpgTCH24AP2ic1Aj2xDXAkOlwMOlwcJKOmOmwOOoOnExO0O-qrS9O8czO33eOnO3O5Ow8l9B2p2i0O8+YEEZQUupDP87232oul6wOoMhwPO28iOwuhc4uzula8ulOtOtugejukAJu8PJOlOgu8e-2rOoMkMnuuczWQKhe2Oku7OrcbuiutK8QX0z23KohJ8rsYu58AtK+gtLioSva5HEKiGgmo+hSlATAXGkcE+xOM+zykuUafq++2fQ7LmwreAISy6na6K2K-q9ugOqenele-qq2m2u212hugYfWLqe+mDSGzCF2+u92ne0MHgLDPq28tBxoDBlwJgLBuYBoEIXB-Bt2xuohuYEhrhAm0Ip2Gqlm+q+KSGmG1Kr8rhz+H8zCmCuKXC5u-qx+jqoRqCmNeCpalaxqoS9isyzi7ijxPigSo6-q9R1q1EiSyGrSzqvK+8wqh4Eq6QThgfac+C8xgqoqnGmx-qxxh8yTWbcgVxg+imyFA20bQCwG020x+Ro8sW7ovS1wP8gxrWLiniksaUXR6B28gxyiox7pSG3szq5RhSkJ4Gucw2gG42pmnSwmyJiqgyrxhofC4Bludm3hpK0CwR3W7w-WqJyqo0aqv8jmpp02lp-q3Jxm028CjaoRtszNGqbNEALspgFATWTQDgEAPasYbNagQcvQeDSQTweQEgTYeQNAcCDcfkRIbAUSYiXkLZnZl9JgcQSGtCS53cHZsBOYStBQezYcNQSrbgbAWwLQDZtQPBF9XCTWO5hQfZtQI5yCXkRMGy8i7EKAXkdwOWUUCyiiMuYF8QUF2gd5lSPQb535gc0tXQNQDyVyF9BgcQSlhgcF4CSFtcY5mFuFryOYJF2bLsVF-CXkMl-AClqlql3Fz5tAAlv5tgDQIAA">Here&#39;s a live demo for you to try it out on, complete with a mock model. (Note: if you&#39;re on Edge or IE, you may run into issues due to the link&#39;s hash length.)</a></p>
+<p>Instead of doing what you would expect, it instead gets really confused and does the wrong thing: it closes the comment list you had open and the post after the one you had the comments open on now just persistently shows &quot;Loading...&quot; even though it thinks it&#39;s already loaded the comments. This is because the comments are lazily loaded and they just assume the same comment is passed each time (which sounds relatively sane here), but in this case, it&#39;s not. This is because of how Mithril.js patches unkeyed fragments: it patches them one by one iteratively in a very simple fashion. So in this case, the diff might look like this:</p>
+<ul>
+<li>Before: <code>A, B, C, D, E</code></li>
+<li>Patched: <code>A, B, C -&gt; D, D -&gt; E, E -&gt; (removed)</code></li>
+</ul>
+<p>And since the component remains the same (it&#39;s always <code>Comment</code>), only the attributes change and it&#39;s not replaced.</p>
+<p>To fix this bug, you simply add a key, so Mithril.js knows to potentially move state around if necessary to fix the issue. <a href="https://flems.io/#0=N4Igxg9gdgzhA2BTEAucD4EMAONEBMQAaEGMAJw1QG0AGIgZgCYB2AXRIDMBLJGG0FEwBbZGgB0ACwAuw+MXRRpiJahAgAvkUEixIYRHyJ44gFb8SkJSulqAOiACueAAQxp5bmGkO7UPwBumOQuALKGxi4AvC4AFJyOUN7c0LEAlC7AfnbSQSFgmGCSiNEuAPIARqaI3uIUiJjKsVCO8PBp2T7+0glJ0ilQLgVFBLEA1ogAnkQu3FDc0hlZ3TnkiNKO5IPDxdQTk2wuAIQxLW0uAPxDhbv7hyhxO4h7U4cxcwvpHd0a2d29yWgLmEmAmAFU8OR0plOjk8i5nIhyAA5XSlTigpHiObKLbrcSIlG6dKwjzrTbbG6jByElAOFwAagRkNRohmAP6qSWpJyAHpeS4AJJGTBtaZCgDk+Bcpmc0mZJXgEDWwmw3AAHpF8Nw1t54OKKo55QsXPgIIgYFAJfKYI5sNhlV0cs7pPyXAAJAAqnoACgBlcQuP0QWawZSYfAzQUuSQRlzSEMAd08ymBkxcEETgwAjo4vGMXMj1vBuJx05CAl5EDzXQKEy5E8qC8EIIlpSbMFB20l4I4jC5sJRsEiXABhMoAJT9MYaRnIMDpKx8tZj0mkuBQ-IA5gtJI4KnUIMJedwYNxMJJRBHMzBeUqVWrNfAALSQefPwcQdWTGvw7jCLcwXIeBSgcGR1wXfljEQLdO2kZ9k24LcZGfTAABZMAAVkQNDxCgYtS0mQ9jzwgiy15DkBlvNZcwtHwQD+F1VnJLZgXEGjHDo2J-0A4CZmWJjlwqQoxi3Sg2weDxOKIGtmJgB1YEQT1JmHB4HAqJUKgcGSlxyDQ0nEaRiigeJEkBEyNIgCpuV05c1g2ViBOXQTuHwB5HDzfBxACND0h0wSXUJVlEHclldH85zIsJH0vAckKXDBCcABk6jWRpEEqapvESpLYks6yIsE35bP00lSp+RiejMzlBhBcFIRgWJIESRYYSXeFCRgUpqDYUlOGVOI-1KWgAG5ZhcAAeIZWyUMbuAZBkMk68RsGcSRYjqxAISRL5SXsikXB9ShhFPRBxFFeBYk6749Mq+EwE2NYlG28gZgddwYEqyigU4dYihe6EnOYhzKRGfBYhpSFtJcb6TJswT9tYzaAYMoyVFMvoBiuyF4cinIHvIJ7pBe0pCRrcqXQp6Ris6WGYb+yQfQgD7Ab2ljQeKcGHHe6RPuIGHqqx3GXUR2rMRexqMQmch2M7M1hDwxxhAqHbgBOqAHgARhmEF1QeJhaH0m68ekQzjIx8zYhLdxhZNnmupia3TZBbALZq7GkVtgKyRBtrvZctyEU87zfLSQqTcCyFQqRcP-bXRB1WkB4paxe9EAV5RE782STcgYRRCUUcZqTmHMRl8g5aPRXldV9WHnoYFMD1lwGENsOc8pjvqeNoqe+7zoae6e6jwL3nSkympTfqdLmladovsFn6GaL-ObEannbdF64wYhkAebpEBGQHZnTdc9lF7hv3Iq35GGtiHniNHouWtR83Yat09WqByK89HmBqAfq5N4LgnbiBdm7LGhIvbX3ZlfOOrl3LBx8tnWyglaQKlel3HImcS4pxlmnDOCdpAoLjjTE2VNKZ9ypoPHIdMVQQACIgAAQpMYUH93AzAWOnW2w8WrDT6gNWIQ0YijXGlNUBSAoBbiMnNBa0DSxxCdtQbgbBsTShOO8ZQCtXIZCUc1JQC1gFKJUWVUkEiVDSMkKUfRTo7KwPwomQ6x1ToQNSGsOA8BGFLDcOsT0-5ECtmIe4hAjCZiYVoLQDI1DKpb2-r9aQ-0o70wSZIF64d4lFCZh9ZODMsm83ScvEea8ckpJXn-WOS4tzrBesnC+rNbJbwJkTF6ZUKkuiqdIPJC4BaYy5HAuxvt7bHFOHPS4x8PriBgCWMAiBoQPDOPAVplV8ZpWUHk2pvSTI4OgVvDJqTITpDNujd+0Ccj2xWmtWI38A6INciHEhEcNhJKaTYNJXccGSSIbHH+RTC7F3rt8vSfcgVLP8EuSQrlEDrJ6ZbDe-TgYHXoYwlhbD7ZvRPlQ-ylT1hlOKTC92cLrk+wOr-NeACT5qMOCcFwCyxmkqUP-QB+BVFTKrHMmlc9QWkgjPgXFSgNmwpPjMbZ8LiWsSOkeU6502ixGoDnPZKNAU9EKavBl98MU1jYK-Y5dTTkJN+bzcl7hKUXJgOtIlLoEFBzucg9uqDlzoJec9SESrsFEM+YnJVFDlzeq0MsoykK+W4LqYSmsW8kXMNYeDelhqmUcHGYsLl1M-D6XSAoPASBzL8DQJrTCKBMIAE5NDaBAEIUQagzAWEUMoVQaBIYlHcJ4bwvgwV0xRlfWJpJKyIETAK92AQoARGgR1SEpQB0RHOmuecBIoYNNgcIXeM6kTaRzguhwS7yAflipsas-M10gB4tDYAMByBgGjjLaK261hGyVfujdz4y27pmA4AAAtDQkG7gp2sElQgeKa-h0xXu9RAAB1OYZpEz1LhMENw+4TprjmFudEoo8CdHhDgzh8x+iindIgJCMhOidvatwHtfasbjqMMOmDPMx2DqMJOjwMAVonzDfOxdedgMrvtfunBwQGhcbjhayK2oYCYA0gQB4toKjwf6FImYQRezxQw1ghMSRVnxXfhRxAeqXJYfPPAXD+H5QxAZImcDmZxAdKA0aAgfppCTCQEIujZ15YGWKEZyZ0zZkN2fEwYFjytPiHlpM+zSApB4eQsZlwDhMBGggC2uOLpAvBfcA5s67nIulFCI0SQYCm7cT0zhiLMh5POaC1XMglA2iGcixkJk3N1QJceXpV1y5oBzFWsGzZsREABB05FHBpReuGWCB07yopOIqZyMN6Qo38SpbCxlmQoEQCxYTE1xLygAgjfIGNhb6XitRey0ZPL6oCsLH0zVkrLgZtzdNpVjAV3Wr1b3o1hi9rKatbOVgGZkgEBzgeIFxojGVo-cQH9+Ac5Wt+vtd+k2d6OPM0QM+KT8Hob7sNGuaAAnHnAGgGAaZYwyN9KEy6VHCxZNIZiFJasH3lxA6nUx8nxDtlHJMic0V3tmeU+Q-AVDdOXQKzWPgCukH-O9xU4NmIvh3ukJh4lkAeSNuRTSP539FUoCD0AwaoDSOoNisGN-btvb8Xkec1RkINGYgM5BzzVjvsF267wGBrsmZ+I52wGDiHAPosgBAymEokxWz5ANeIMPOPBLM+J1soh-Wt7hCMCYHlQb1UcPjLHnO8vIq+r-ZrgDF8xwGv10RpLJGTeafN6K4eqqos2+nTG+3B0EcGoj5FBdaTMiOtD4SfSt72MGufBUQwP5+YxsMrHvvMXH42GfBCowrfBJ457PmaP+u44J+MFIQNReY3apMkLggovxc+qz-7EA0YzRWnlCWCY8YIV8xzmr0xGutcF7yU72ZuMS-07L6vrTFvpoa9aMJ1gd68W850HdYgP8XcIN3d7VPdChwd-skQ1I-cA8XAg9NgE0w9xAF9lwo8wgIgTBp41khVyZ1dbo89W038T4nMh0r54QzVMwg0HZS4+dadoMQ8a8YAAAxBmAgXnfnQjWBI3X-U3VIf-KvajE+YA+jUApjO3WyavP+UoJgxMFgsZDfEwKzA1deDFFweZTlCApvRdO3YgVdWIDvYAdBB+HvOHQSO9HmQfYfaGB+bZSfEAZjdwZ8UQWbPAwXXeTALw+CGNV8YufwyKJfAnFfcQy+UnSKBRWII4NQjQgAMlSOOBjV4P4PwH60EiyL4JSQEOp3IEmwF0ii0PED2RYNT0WDZw2nYkP0wETGPyKim15j+3UN0NKGSM6JYJUw0FP0eQfhjWfiUGfUPgb3MPKJGJ12LmiCiBiE1jGRlwMN9z5la3sPh0COCNn0hQiJdCiMJ1XzyOXEqLnyhVoI3nqIPxF2aNaJPy+3ogv2gGtBAW4FvwDQfzp2Py2LJz6O6KuEcJPjCO4IOP1W4IWI5TaC7iBP7xr2fCdkRIgAjEQ2hgcCShRO1CkRwIcAeIeDlXKObwRKdmhiyLy1dnfl305xNhvigINX4n2AeDHzPkANHmZINW9W9hvRU0dzmNVCR34n3gTV7y7l6lhzWIWRrAoOTSoL8Dpj4NGFxkqL2S6UOTRn30aLuJaOEN9lENI1iLX3p2kI+iyyIMs3WDVP8zpPXV+gIAiP3UkE1nRJAEVPwDxKVSGUWOhJAjhPXScKRKVFRKkRdMxODK3FxJAGPweGBO8ON3BIXXfyPGAz+Lb1MJBNJP5nOXAXflDXKLpLyUZKmAeCZXRXcBLJPi5Oz1V0f2lOf0oMHgVgMBaliDNAelHnECH3wHFDdLSHTWgizTUE1gADZNYUAmAAAOYtHQctCQMAGAKtKwGtWwNALs9MZYFwGGaAeCDEE6fUB4AAQU8FFBmFE1gBRyRFLBGn-TBQ3Tak3JEwQMmGTiQHVGvMGBcFFCQigGfC4WEG6RmWsHIHfMHmCJcDvI3Mbl2zmGcKx2EHrnEGwmEBAr+HvTVG8B3XvKgp3B-M8EiwQqQpQtvMJC3QwrWFmAAiwqWxLgYHTnfM3KH3IDnGfArm1GcAeFouQpvL8GCJmGImAywsYp901mwHVDcAQFchcA0hEnoqkuVGYtYu4HYpcE1jor8E3OwB5UQy1jUo-JBGgp-ITGwAQpYEIu4qgH4qR3T0Tj40wEEvkpQJpWgEQFkvcW4AAC94pB18JZKGEkROAlQTc58jAoBZKzN8AjItYIkABSWS6iji3Sh808J8h4SyMAMYWS-qJQFHDy+KVSriuUiyxHPAFHODE0SCnBVCEsLcDWFwPCmQIini4qkoTHVTLCrK+CM8TynSgqhihyzdRS5SpgRKuSpixy7yly9SqSkSMSGaQOAAYloEwBYFksgHvAeHms4C2tks0vwGxK3AIvThUpGsfKwGfNDBLHwkHyVHSsaosqcN8LssgtOswHOoCoTlktlHcEIjCOsH5TcE0pmUH3WETEQBUFkv0pwufCMpMrMo-I6pyu6pcFoHEAnN0tAoevWDsoAD4XAAAqI+AmyCyGmCpATgEufKu63Y0ImxPipwi4vi0Ii4+ysa8geZZynarSqReuTK7cxGvKkahG-bB4BYL8sAVazYOANm4+HEJEKmpwmm-5P7RhTBe6kEi4lAZWmOJqgfDWrWkISCta5UDaic02+WkErIrCkmwyiAYy5GxC9Gv4F9BCRACoMYBYZ8fYTgCuUQLqTsf8dKMM-arC2gaKzIaaP6kuDErEtEkAMaYqTcpgTCMO4ACO5c1AoOxDXAuOlwBOlwcJFOtOmwDOmOnE7O+Oqa0ywupc4u33TOsu8u3Om8l9L2n2i0T8+YEEZQeupDSC0O8Omu-66O8MhwCuj8pO6u7c2u4e-axuvOgugeqeoekAHu8PHOvOquxeyOku8MyMsezczWGKre9Ouu0urcUepuwq8QIM4OiqohX8rsWu58AtF+gtUS2Sy65HeK5Gqmm+7SlATAcmkcO+xOB+kKkuUaKaz+2fQ7EWwreAWSl686tKjKqaweqOles+veqal2t2j2-2rugYfWLqT+mDFGzCP2zuwOs+0MHgLDSaj8ghxoIhlwJgEhuYBoEIchyhgO7umhuYOhrhKm0Ip2dqvmrq+KFGtGgq0CkRz+cCki9CuKCi3uqa7+4amR1CmNLC3a-anq2SoSxykSsSjxSS6S26qawxga1E5SlG0ykayqr8mqh4eq6QYRgfNcrCxx6q2qsmtxqa7x78yTWbcgfxq+pmyFK20bGCmG+2+xzR28hW7oyy1wSCqxrWUS8SksaUcx1Bj8qxlimx7pFG4cka3R7SuJuGzc626G22nm8y6m5J5q6ykJhoKi2BluQW8R3KhC6R827wy2lJlqo0NqyCoWnp+2vpqa8p7m+2pC46mR-szNGqbNEATWZgFATWTQDgEAS6sYbNagGcvQeDSQTweQEgTYeQNAcCDcfkRIbAUSYiXkE5s5l9JgcQFGtCZ53cM5sBOYStBQezYcNQSrbgbAWwLQI5tQPBF9XCTWD5hQS5tQG5yCXkRMdypi7EKAXkdwOWUUZyiiMuWF8QeF2gQFlSPQUF8F6c0tXQNQDyVyF9BgcQZlhgRF4CZFtcW5tFjFryOYHF2bLsfF-CXkBl-AJlllll8l4FtAKliFtgDQIAA">Here&#39;s a live, working example of everything fixed.</a></p>
+<pre><code class=language-javascript>// In the `Feed` component
+m(&quot;.post-list&quot;, posts.map(function(post) {
+    return m(Post, {key: post.id, post: post})
+}))
+
+// In the `Post` component
+m(&quot;.comment-list&quot;, comments.map(function(comment) {
+    return m(Comment, {key: comment.id, comment: comment})
+}))
+</code></pre>
+<p>Note that for the comments, while it would technically work without keys in this case, it would similarly break if you were to add anything like nested comments or the ability to edit them, and you&#39;d have to add keys to them.</p>
+<h3 id=keeping-collections-of-animated-objects-glitch-free><a href=#keeping-collections-of-animated-objects-glitch-free>Keeping collections of animated objects glitch-free</a></h3>
+<p>On certain occasions, you might be wanting to animate lists, boxes, and similar. Let&#39;s start out with this simple code:</p>
+<pre><code class=language-javascript>var colors = [&quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;, &quot;gray&quot;]
+var counter = 0
+
+function getColor() {
+    var color = colors[counter]
+    counter = (counter + 1) % colors.length
+    return color
+}
+
+function Boxes() {
+    var boxes = []
+
+    function add() {
+        boxes.push({color: getColor()})
+    }
+
+    function remove(box) {
+        var index = boxes.indexOf(box)
+        boxes.splice(index, 1)
+    }
+
+    return {
+        view: function() {
+            return [
+                m(&quot;button&quot;, {onclick: add}, &quot;Add box, click box to remove&quot;),
+                m(&quot;.container&quot;, boxes.map(function(box, i) {
+                    return m(&quot;.box&quot;,
+                        {
+                            &quot;data-color&quot;: box.color,
+                            onclick: function() { remove(box) },
+                        },
+                        m(&quot;.stretch&quot;)
+                    )
+                })),
+            ]
+        },
+    }
+}
+</code></pre>
+<p>It looks pretty innocent, but <a href="https://flems.io/#0=N4IgzgxgTg9gNnEAuA2gBgDRoLoZAMwEs4BTMZFUAOwEMBbE5EAOgAsAXOxPCGK9kvyYgAvhmr1GSFgCtyPPgKHSAbjSgACXnBhQwGgLwaUAHRBQSAEzMYNZgJ4kEMAO427IAEZwAriXdmAOZQNPZm2CZUapq8PvwkmkZokZH4cRDshHwagSTsAMLwugAUAJQawCns0VpFibU6eiix8VARVCbsLQL1xd0JGgDUGgCM5QCkDbpgzKRUgeysVRbsPlBUU1CRIilUaVQZWRsAQjAAHmRlFVU1nudkhsbtVfuH2TSWlleVHeyddxcZgAHHxgVjFYDaXRIHJ5QqNMoiUpVHYdX6vTLZCx0GAqEjFAHlH6dTo1QhUSwkM6PAFkZjkylnADy+AJ52Rv3+9xmYCBcEIEHxDKptjGKN2nRWaw2xL+1UIJBcMIxR2+VRJ7Cl62M6rlnToxTMnh87HYfHcwD4EH5EAA1jCPpYxB4AIKfDQA2zWgW2j3nDRmjTY3H+EClDC6jUGszMXj8GjkhLuWkzOg0IHFFV8NlnWyEImRvWavLSjTRlgAmyFjWdWU1oskkCWGjsGgAWihW2QfrOsbqEc5DaLVpt9o0Wao3yDJBxeJz5TE1aLi8H9f1hpYYGLXSWYaXnQ5a-YSPDheecpXnVRqMidGYOLi7GKlhgEB8DH4zDulnstlOgNKEAFDoIFiASJhPBoTwnCA8AnBIN4qHIaQAGYAHYkBGURxBAWgGCYWMwHkEA4yUdgIJgH8KnHRQ23wehiHsGEXSgQgaDgWwwBoJC2zABJCHwABuDQbyoPt40TTQfg0DRLEIXk4FCZVSDOQTIhk-AVLonQlSDVwNBcEIgTUqhRIAAVtEh7HwEIGH0CB7GtEhrg2DQ0EmYAy3UQJyRhAAmGdhNYEhCECDh-MCgzCEsRYIroYTNW4sB8F0OgYVgVsBGKNsABYAFZKUCUphNRGS8vc6i0ygHyqBhNAgpCsL2BhAA2SKXGi2KNDa+KAxCJCUqgNK9My-F8sK4qRPU0Y0AqzyqpquKGtC8KNAC3qOpi1glr6pLBuGjKW3xXKCpIIqSu2XYv39aSNGClbmo0HLAumzauue+Lps0qk6rcjQaBNGATJkhbfLWl7TKurcVggVgXJk7jCDTTFaq0RzSDW-QSBoPi23JNsYBNNz9CoVL2I0ckiCoQgBGBv0oEpKAYRGIFqTAeBoo9RS7RM0SUGbVsOzqAwLEsbANGYaG8lh6jILtYJCYpGEAGJ8Fmi6qH5lt207AxHGcFxxcl7cZc8uXbQVuJLBV-AIHqqbNYFnXhe8PwjalndZZoeXYCtlXZqEh2tcF3XglCd2Tbhs3vYt32lY0ZWAA5k5K2C+NIRDkJAPyRiQFCUNEXAQH5KhbWQyhcMkJg6Bp1hWO4EA1kQaQOHYIEwCQAB6Tu4iBC2+zoTua8WeuzL85g0GYHKh9r+v73JZg5Fg9h7CBKRwGgQggXIkRsBEIA">try a live example</a>. In that example, click to make a couple boxes, pick a box, and follow its size. We want the size and spin to be tied to the box (denoted by color) and not the position in the grid. You&#39;ll notice that instead, the size ends up jumping suddenly up, but it stays constant with location. This means we need to give them keys.</p>
+<p>In this case, giving them unique keys is pretty easy: just create a counter that you increment each time you read it.</p>
+<pre><code class=language-diff> var colors = [&quot;red&quot;, &quot;yellow&quot;, &quot;blue&quot;, &quot;gray&quot;]
+ var counter = 0
+
+ function getColor() {
+     var color = colors[counter]
+     counter = (counter + 1) % colors.length
+     return color
+ }
+
+ function Boxes() {
+     var boxes = []
+     var nextKey = 0
+
+     function add() {
+-        boxes.push({color: getColor()})
++        var key = nextKey
++        nextKey++
++        boxes.push({key: key, color: getColor()})
+     }
+
+     function remove(box) {
+         var index = boxes.indexOf(box)
+         boxes.splice(index, 1)
+     }
+
+     return {
+         view: function() {
+             return [
+                 m(&quot;button&quot;, {onclick: add}, &quot;Add box, click box to remove&quot;),
+                 m(&quot;.container&quot;, boxes.map(function(box, i) {
+                     return m(&quot;.box&quot;,
+                         {
++                            key: box.key,
+                             &quot;data-color&quot;: box.color,
+                             onclick: function() { remove(box) },
+                         },
+                         m(&quot;.stretch&quot;)
+                     )
+                 })),
+             ]
+         },
+     }
+ }
+</code></pre>
+<p><a href="https://flems.io/#0=N4IgzgxgTg9gNnEAuA2gBgDRoLoZAMwEs4BTMZFUAOwEMBbE5EAOgAsAXOxPCGK9kvyYgAvhmr1GSFgCtyPPgKHSAbjSgACXnBhQwGgLwaUAHRBQSAEzMYNZgJ4kEMAO427IAEZwAriXdmAOZQNPZm2CZUapq8PvwkmkZokZH4cRDshHwagSTsAMLwugAUAJQawCns0VpFibU6eiix8VARVCbsLQL1xd0JGgDUGgCM5QCkDbpgzKRUgeysVRbsPlBUU1CRIilUaVQZWRsAQjAAHmRlFVU1nudkhsbtnTVUJGfsANIk9o-JHR12PtDtkaJZLFdKoCXuoNABrH6PN4fb5haHsZFfH6DQZVTp3C4zAAOPjArGKwAR9iQ8J+tm0uhpuQKdTKIlKVR2AM6wMy2QsdBgKhIxQJ5ShnRhmkIVEs70eBLIzBlcrOAHl8KLzhz0YqZmAiXBCBARSr3rYxpzdp0VmsNhL2C9CCQXDTeUdIXjHexbetjF7JZximZPD52Ow+O5gHwIEaIHCaWDLGIPABBcEaAn0uNwzPnDQRjQCoX+EClDAB710YMsXj8GgyhLuPXMOg0InFd18LVnWyEcWVwO+jbVszMAk2QfezoOwNz71UmkE5hUivo+dzkCWGjsGgAWgZW2QebOzEPa430+9MZzbvSfKokKLJEFwp75TEU8Dn-XV86o5YMAfTyCAljLL92B1S92XLStnm9H9Oi5LlIjoVsYDidhiksGAIB8Bh+HHGBLHsWxTkJUoQAUOgiWIBImE8GhPCcKjwCcEgQSochpAAFhGJARlEcQQFoBgmDPMB5BAOslHYBjiN+YANHwRQ93wehiGpDRUygQgaDgWwwBoLi9zABJCHwABuDQUKoM9FAbN5NChDQNEsQgDTgUI3VIM5LMiVz8F8tSdFdItXA0FwQiJfyqFsgABKl8BCBh9AgexYxIa4Ng0NBJiUtsoECGUaQAJhfazWBIQhAg4MqKsiwhLEWeq6Gsn1jLAFSoDoGlYF3ARij3HiAFY5UCUprK5VyRryioNEK4qqBpNBKuq2r2BpAA2BqXCalqNB2tqCxCLjut68KBpFUbxsmmyAtGNA5oK9QltataarqjRyuOvbmtYd6Ts686+pgK6hpukgJqm7ZdiIs5stcqrPs2jQeIqh6-oO9G2oeoL3hW3KNBoMMYFi1zFpK76MbiuGgJWUDEeJqhCDbB8aXSzLvv0EgaDMvcZT3DD2Fy-QqF0Ns4A0GUiBZgRybzKA5SgGkRiJBGwHgJrMy8+NYtslBt13A86gMCxLGwDRmHpkDWHmxj42CDDZRpABifAnphqhDZ3fdDwMRxnBcS3reAro7aUh24SduJLDd-AIFW+7vaNv3Te8PwQ5t8P7ZoR3YFjt2nqs5OfeN-3glCLOw8ZyO8+jguXY0V2AA426m1izNITjuJAUqW6QHiW9EXAQCNKg4W4ygRMkJg6EIRZdO4EA1kQaQOHYIkwCQAB6He4iJaP7LoHf58X4h4tK5g0GYHjT4X1gl9bGVmDkVj2HsIkpHAaBCCJOSRDYBEEAA">Here&#39;s a fixed demo for you to play with, to see how it works differently.</a></p>
+<h3 id=reinitializing-views-with-single-child-keyed-fragments><a href=#reinitializing-views-with-single-child-keyed-fragments>Reinitializing views with single-child keyed fragments</a></h3>
+<p>When you&#39;re dealing with stateful entities in models and such, it&#39;s often useful to render model views with keys. Suppose you have this layout:</p>
+<pre><code class=language-javascript>function Layout() {
+    // ...
+}
+
+function Person() {
+    // ...
+}
+
+m.route(rootElem, &quot;/&quot;, {
+    &quot;/&quot;: Home,
+    &quot;/person/:id&quot;: {
+        render: function() {
+            return m(Layout,
+                m(Person, {id: m.route.param(&quot;id&quot;)})
+            )
+        }
+    },
+    // ...
+})
+</code></pre>
+<p>Chances are, your <code>Person</code> component probably looks something like this:</p>
+<pre><code class=language-javascript>function Person(vnode) {
+    var personId = vnode.attrs.id
+    var state = &quot;pending&quot;
+    var person, error
+
+    m.request(&quot;/api/person/:id&quot;, {params: {id: personId}}).then(
+        function(p) { person = p; state = &quot;ready&quot; },
+        function(e) { error = e; state = &quot;error&quot; }
+    )
+
+    return {
+        view: function() {
+            if (state === &quot;pending&quot;) return m(LoadingIcon)
+            if (state === &quot;error&quot;) {
+                return error.code === 404
+                    ? m(&quot;.person-missing&quot;, &quot;Person not found.&quot;)
+                    : m(&quot;.person-error&quot;,
+                        &quot;An error occurred. Please try again later&quot;
+                    )
+            }
+            return m(&quot;.person&quot;,
+                m(m.route.Link,
+                    {
+                        class: &quot;person-edit&quot;,
+                        href: &quot;/person/:id/edit&quot;,
+                        params: {id: personId},
+                    },
+                    &quot;Edit&quot;
+                ),
+                m(&quot;.person-name&quot;, &quot;Name: &quot;, person.name),
+                // ...
+            )
+        }
+    }
+}
+</code></pre>
+<p>Say, you added a way to link to other people from this component, like maybe adding a &quot;manager&quot; field.</p>
+<pre><code class=language-javascript>function Person(vnode) {
+    // ...
+
+    return {
+        view: function() {
+            // ...
+            return m(&quot;.person&quot;,
+                m(m.route.Link,
+                    {
+                        class: &quot;person-edit&quot;,
+                        href: &quot;/person/:id/edit&quot;,
+                        params: {id: personId},
+                    },
+                    &quot;Edit&quot;
+                ),
+                m(&quot;.person-name&quot;, person.name),
+                // ...
+                m(&quot;.manager&quot;,
+                    &quot;Manager: &quot;,
+                    m(m.route.Link,
+                        {
+                            href: &quot;/person/:id&quot;,
+                            params: {id: person.manager.id}
+                        },
+                        person.manager.name
+                    )
+                ),
+                // ...
+            )
+        }
+    }
+}
+</code></pre>
+<p>Assuming the person&#39;s ID was <code>1</code> and the manager&#39;s ID was <code>2</code>, you&#39;d switch from <code>/person/1</code> to <code>/person/2</code>, remaining on the same route. But since you used <a href=route.html#routeresolverrender>the route resolver <code>render</code> method</a>, the tree was retained and you just changed from <code>m(Layout, m(Person, {id: &quot;1&quot;}))</code> to <code>m(Layout, m(Person, {id: &quot;2&quot;}))</code>. In this, the <code>Person</code> didn&#39;t change, and so it doesn&#39;t reinitialize the component. But for our case, this is bad, because it means the new user isn&#39;t being fetched. This is where keys come in handy. We could change the route resolver to this to fix it:</p>
+<pre><code class=language-javascript>m.route(rootElem, &quot;/&quot;, {
+    &quot;/&quot;: Home,
+    &quot;/person/:id&quot;: {
+        render: function() {
+            return m(Layout,
+                // Wrap it in an array in case we add other elements later on.
+                // Remember: fragments must contain either only keyed children
+                // or no keyed children.
+                [m(Person,
+                    {id: m.route.param(&quot;id&quot;), key: m.route.param(&quot;id&quot;)}
+                )]
+            )
+        }
+    },
+    // ...
+})
+</code></pre>
+<h3 id=common-gotchas><a href=#common-gotchas>Common gotchas</a></h3>
+<p>There&#39;s several common gotchas that people run into with keys. Here&#39;s some of them, to help you understand why they don&#39;t work.</p>
+<h4 id=wrapping-keyed-elements><a href=#wrapping-keyed-elements>Wrapping keyed elements</a></h4>
+<p>These two snippets don&#39;t work the same way:</p>
+<pre><code class=language-javascript>users.map(function(user) {
+    return m(&quot;.wrapper&quot;, [
+        m(User, {user: user, key: user.id})
+    ])
+})
+
+users.map(function(user) {
+    return m(&quot;.wrapper&quot;, {key: user.id}, [
+        m(User, {user: user})
+    ])
+})
+</code></pre>
+<p>The first binds the key to the <code>User</code> component, but the outer fragment created by <code>users.map(...)</code> is entirely unkeyed. Wrapping a keyed element this way doesn&#39;t work, and the result could be anything ranging from extra requests each time the list is changed to inner form inputs losing their state. The resulting behavior would similar to the <a href=#linking-model-data-to-views>post list&#39;s broken example</a>, but without the issue of state corruption.</p>
+<p>The second binds it to the <code>.wrapper</code> element, ensuring the outer fragment <em>is</em> keyed. This does what you likely wanted to do all along, and removing a user won&#39;t pose any issues with the state of other user instances.</p>
+<h4 id=putting-keys-inside-the-component><a href=#putting-keys-inside-the-component>Putting keys inside the component</a></h4>
+<p>Suppose, in the <a href=#reinitializing-views-with-single-child-keyed-fragments>person example</a>, you did this instead:</p>
+<pre><code class=language-javascript>// AVOID
+function Person(vnode) {
+    var personId = vnode.attrs.id
+    // ...
+
+    return {
+        view: function() {
+            return m.fragment({key: personId},
+                // what you previously had in the view
+            )
+        }
+    }
+}
+</code></pre>
+<p>This won&#39;t work, because the key doesn&#39;t apply to the component as a whole. It just applies to the view, and so you aren&#39;t re-fetching the data like you were hoping for.</p>
+<p>Prefer the solution used there, putting the key in the vnode <em>using</em> the component rather than inside the component itself.</p>
+<pre><code class=language-javascript>// PREFER
+return [m(Person,
+    {id: m.route.param(&quot;id&quot;), key: m.route.param(&quot;id&quot;)}
+)]
+</code></pre>
+<h4 id=keying-elements-unnecessarily><a href=#keying-elements-unnecessarily>Keying elements unnecessarily</a></h4>
+<p>It&#39;s a common misconception that keys are themselves identities. Mithril.js enforces for all fragments that their children must either all have keys or all lack keys, and will throw an error if you forget this. Suppose you have this layout:</p>
+<pre><code class=language-javascript>m(&quot;.page&quot;,
+    m(&quot;.header&quot;, {key: &quot;header&quot;}),
+    m(&quot;.body&quot;),
+    m(&quot;.footer&quot;),
+)
+</code></pre>
+<p>This obviously will throw, as <code>.header</code> has a key and <code>.body</code> and <code>.footer</code> both lack keys. But here&#39;s the thing: you don&#39;t need keys for this. If you find yourself using keys for things like this, the solution isn&#39;t to add keys, but to remove them. Only add them if you really, <em>really</em> need them. Yes, the underlying DOM nodes have identities, but Mithril.js doesn&#39;t need to track those identities to correctly patch them. It practically never does. Only with lists where each entry has some sort of associated state Mithril.js doesn&#39;t itself track, whether it be in a model, in a component, or in the DOM itself, do you need keys.</p>
+<p>One last thing: avoid static keys. They&#39;re always unnecessary. If you&#39;re not computing your <code>key</code> attribute, you&#39;re probably doing something wrong.</p>
+<p>Note that if you really need a single keyed element in isolation, <a href=#reinitializing-views-with-single-child-keyed-fragments>use a single-child keyed fragment</a>. It&#39;s just an array with a single child that&#39;s a keyed element, like <code>[m(&quot;div&quot;, {key: foo})]</code>.</p>
+<h4 id=mixing-key-types><a href=#mixing-key-types>Mixing key types</a></h4>
+<p>Keys are read as object property names. This means <code>1</code> and <code>&quot;1&quot;</code> are treated identically. If you want to keep your hair, don&#39;t mix key types if you can help it. If you do, you could wind up with duplicate keys and unexpected behavior.</p>
+<pre><code class=language-javascript>// AVOID
+var things = [
+    {id: &quot;1&quot;, name: &quot;Book&quot;},
+    {id: 1, name: &quot;Cup&quot;},
+]
+</code></pre>
+<p>If you absolutely must and you have no control over this, use a prefix denoting its type so they remain distinct.</p>
+<pre><code class=language-javascript>things.map(function(thing) {
+    return m(&quot;.thing&quot;,
+        {key: (typeof thing.id) + &quot;:&quot; + thing.id},
+        // ...
+    )
+})
+</code></pre>
+<h5 id=hiding-keyed-elements-with-holes><a href=#hiding-keyed-elements-with-holes>Hiding keyed elements with holes</a></h5>
+<p>Holes like <code>null</code>, <code>undefined</code>, and booleans are considered unkeyed vnodes, so code like this won&#39;t work:</p>
+<pre><code class=language-javascript>// AVOID
+things.map(function(thing) {
+    return shouldShowThing(thing)
+        ? m(Thing, {key: thing.id, thing: thing})
+        : null
+})
+</code></pre>
+<p>Instead, filter the list before returning it, and Mithril.js will do the right thing. Most of the time, <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter><code>Array.prototype.filter</code></a> is precisely what you need and you should definitely try it out.</p>
+<pre><code class=language-javascript>// PREFER
+things
+    .filter(function(thing) { return shouldShowThing(thing) })
+    .map(function(thing) {
+        return m(Thing, {key: thing.id, thing: thing})
+    })
+</code></pre>
+<h4 id=duplicate-keys><a href=#duplicate-keys>Duplicate keys</a></h4>
+<p>Keys for fragment items <em>must</em> be unique, or otherwise, it&#39;s unclear and ambiguous what key is supposed to go where. You may also have issues with elements not moving around like they&#39;re supposed to.</p>
+<pre><code class=language-javascript>// AVOID
+var things = [
+    {id: &quot;1&quot;, name: &quot;Book&quot;},
+    {id: &quot;1&quot;, name: &quot;Cup&quot;},
+]
+</code></pre>
+<p>Mithril.js uses an empty object to map keys to indices to know how to properly patch keyed fragments. When you have a duplicate key, it&#39;s no longer clear where that element moved to, and so Mithril.js will break in that circumstance and do unexpected things on update, especially if the list changed. Distinct keys are required for Mithril.js to properly connect old to new nodes, so you must choose something locally unique to use as a key.</p>
+<hr>
+<small>License: MIT. &copy; Leo Horie.</small>
+</section>
+</main>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-jsx.min.js></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-diff.min.js></script>
+<script src=https://unpkg.com/mithril@2.2.1/mithril.js async></script>
+<script src=https://flems.io/flems.html id=flems defer></script>
+<script>
+document.querySelector(".hamburger").onclick = function() {
+			document.body.className = document.body.className === "navigating" ? "" : "navigating"
+			document.querySelector("h1 + ul").onclick = function() {
+				document.body.className = ''
+			}
+		}
+		document.getElementById("flems").onload = function() {
+			var systemFonts = [
+				"body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }",
+				"body { height: 100%; overflow:hidden; display:flex; justify-content: center; align-items:center; }"
+			].join("")
+			;[].forEach.call(document.querySelectorAll("pre code.language-js"), function(el) {
+				el = el.parentNode
+
+				var div = document.createElement("div")
+				window.Flems(div, {
+					middle        : 60,
+					editable      : true,
+					toolbar       : false,
+					shareButton   : true,
+					console       : false,
+					autoHeight    : true,
+					files: [{
+						name: ".js",
+						content: el.textContent
+					}, {
+						name: ".css",
+						content: systemFonts
+					}],
+					links: [{
+						name: "mithril",
+						type: "script",
+						url: "https://unpkg.com/mithril@2.2.1/mithril.js"
+					}]
+				}, "https://flems.io/flems.html")
+
+				el.parentNode.insertBefore(div, el)
+				el.parentNode.removeChild(el)
+			})
+		}
+</script>
