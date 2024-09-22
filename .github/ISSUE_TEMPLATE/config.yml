@@ -1,5 +1,10 @@
 blank_issues_enabled: true
 contact_links:
+  - name: ℹ Mithril.js bugs
+    url: https://github.com/MithrilJS/mithril.js/issues/new
+    about: |
+      Found a bug in Mithril.js? File an issue in the Mithril.js core repo. This is strictly for
+      documentation.
   - name: ℹ Questions, Ideas, and Discussions
     url: https://github.com/MithrilJS/mithril.js/discussions
     about: |
