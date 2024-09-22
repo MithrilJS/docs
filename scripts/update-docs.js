@@ -24,16 +24,10 @@ async function update() {
 	})
 
 	await ghPages.publish(path.resolve(__dirname, "../dist"), {
-		// Note: once this is running on Travis again, run
-		// `git remote add upstream git@github.com:MithrilJS/mithril.js.git` to
-		// force it to go over SSH so the saved keys are used.
-		// https://github.com/tschaub/gh-pages/issues/160
 		repo: upstream.push.repo,
 		remote: upstream.push.remote,
 		src: ["**/*", ".nojekyll"],
-		message: `Generated docs for commit ${commit} [skip ci]`,
-		// May want to enable this if an API token resolves the issue.
-		// silent: !!process.env.TRAVIS_CI,
+		message: `Generated docs for commit ${commit}`,
 	})
 
 	console.log("Published!")

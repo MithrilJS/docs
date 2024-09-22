@@ -1,0 +1,10 @@
+name: Deny pushing to `gh-pages`
+on:
+  pull_request:
+    types: [opened]
+    branches: [gh-pages]
+permissions:
+  issues: write
+jobs:
+  reject:
+    uses: MithrilJS/infra/.github/workflows/reject-pr.yml@main
