@@ -1,4 +1,4 @@
-name: merge
+name: Deploy to GitHub Pages
 
 on:
   push:
