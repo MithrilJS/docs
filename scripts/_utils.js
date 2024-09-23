@@ -3,7 +3,6 @@ import * as fs from "node:fs/promises"
 import * as path from "node:path"
 import {fileURLToPath} from "node:url"
 import {pipeline} from "node:stream/promises"
-import {setMaxListeners} from "node:events"
 
 export const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 export const p = (...args) => path.resolve(root, ...args)
