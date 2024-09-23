@@ -1,26 +1,23 @@
-"use strict"
+import * as path from "node:path"
 
-const path = require("path")
-const {marked} = require("marked")
+import * as marked from "marked"
 
-const {getCodeLintErrors} = require("./lint-code.js")
-const {checkHttp} = require("./lint-http-link.js")
-const {checkLocal} = require("./lint-relative-link.js")
-const {rel} = require("../_utils.js")
-const {submitTask} = require("./task-queue.js")
+import {checkHttp} from "./lint-http-link.js"
+import {checkLocal} from "./lint-relative-link.js"
+import {getCodeLintErrors} from "./lint-code.js"
+import {rel} from "../_utils.js"
+import {submitTask} from "./task-queue.js"
+
+/*
+Unfortunately, most of this code is just working around a missing feature, namely that lexer tokens
+don't come with location info: https://github.com/markedjs/marked/issues/2134
+
+Be careful when trying to debug the recursion - it's pretty gnarly and, thanks to a since-fixed bug
+in Marked, it took a very long time to debug.
+*/
 
 /** @param {string} contents */
-function processOne(file, contents, callback) {
-	/*
-	Unfortunately, most of this code is just working around a missing feature that's compounded on
-	by a lexer bug.
-
-	- No location info on lexer tokens: https://github.com/markedjs/marked/issues/2134
-	- Tabs not preserved in lexer tokens' raw text: https://github.com/markedjs/marked/issues/3440
-
-	This took far too long to debug, like several hours of it. But I do have correct offsets now.
-	*/
-
+export function processOne(file, contents, callback) {
 	const relativePath = rel(file)
 	const base = path.dirname(file)
 	const syncErrors = []
@@ -37,8 +34,8 @@ function processOne(file, contents, callback) {
 	const getSpanLineCol = (startOffset, endOffset) => {
 		let source = contents.slice(0, startOffset)
 		let line = 1
-		let next = -1
 		let prev = -1
+		let next
 
 		while ((next = source.indexOf("\n", prev + 1)) >= 0) {
 			line++
@@ -96,7 +93,7 @@ function processOne(file, contents, callback) {
 
 	/**
 	 * @param {number} startOffset
-	 * @param {import("marked").Tokens.TableCell[]} cells
+	 * @param {marked.Tokens.TableCell[]} cells
 	 */
 	const visitCellList = (startOffset, parentOffset, cells, parent) => {
 		for (const cell of cells) {
@@ -105,33 +102,15 @@ function processOne(file, contents, callback) {
 		return parentOffset
 	}
 
-	// Nasty workaround for https://github.com/markedjs/marked/issues/3440
-	const advanceTabViaSpaceReplacement = (offset, raw, start, end) => {
-		while (start < end) {
-			const real = contents.charCodeAt(offset++)
-			const synthetic = raw.charCodeAt(start++)
-			if (
-				real === 0x09 && synthetic === 0x20 &&
-				raw.charCodeAt(start) === 0x20 &&
-				raw.charCodeAt(++start) === 0x20 &&
-				raw.charCodeAt(++start) === 0x20
-			) {
-				start++
-			}
-		}
-
-		return offset
-	}
-
 	/**
 	 * @param {number} startOffset
-	 * @param {import("marked").MarkedToken[]} tokens
+	 * @param {marked.MarkedToken[]} tokens
 	 */
 	const visitList = (startOffset, parentOffset, tokens, parent) => {
 		for (const child of tokens) {
 			const nextIndex = parent.raw.indexOf(child.raw, parentOffset)
-			const innerStart = advanceTabViaSpaceReplacement(startOffset, parent.raw, parentOffset, nextIndex)
-			const outerStart = advanceTabViaSpaceReplacement(innerStart, child.raw, 0, child.raw.length)
+			const innerStart = startOffset + (nextIndex - parentOffset)
+			const outerStart = innerStart + child.raw.length
 			parentOffset = nextIndex + child.raw.length
 			startOffset = outerStart
 			visit(innerStart, child)
@@ -143,7 +122,7 @@ function processOne(file, contents, callback) {
 
 	/**
 	 * @param {number} startOffset
-	 * @param {import("marked").MarkedToken} token
+	 * @param {marked.MarkedToken} token
 	 */
 	const visit = (startOffset, token) => {
 		const endOffset = startOffset + token.raw.length
@@ -159,16 +138,16 @@ function processOne(file, contents, callback) {
 					// Prefer https: > http: where possible, but allow http: when https: is
 					// inaccessible.
 					if ((/^https?:\/\//).test(href)) {
-						submitTask(
-							checkHttp.bind(null, href),
-							asyncWarnCallback.bind(null, startOffset, endOffset),
-						)
+						submitTask((next) => checkHttp(href, (message) => {
+							next()
+							asyncWarnCallback(startOffset, endOffset, message)
+						}))
 						pending++
 					} else if (!href.includes(":")) {
-						submitTask(
-							checkLocal.bind(null, base, href),
-							asyncErrorCallback.bind(null, startOffset, endOffset),
-						)
+						submitTask((next) => checkLocal(base, href, (message) => {
+							next()
+							asyncErrorCallback(startOffset, endOffset, message)
+						}))
 						pending++
 					}
 				}
@@ -223,8 +202,4 @@ function processOne(file, contents, callback) {
 	syncErrors.length = 0
 
 	settle()
-}
-
-module.exports = {
-	processOne,
 }

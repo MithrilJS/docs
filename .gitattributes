@@ -1,10 +1,11 @@
 * text=auto
-/mithril.js binary
-/mithril.min.js binary
+/archive/**/mithril.js binary
+/archive/**/stream.js binary
 /package-lock.json binary
-/yarn.lock binary
 
 # Assets
 *.png binary
 *.svg binary
 *.ico binary
+*.zip binary
+*.min.* binary

@@ -17,30 +17,30 @@ Mithril.js is a modern, small, fast client-side Javascript framework for buildin
 ### What is Mithril.js?
 
 Mithril.js is a modern client-side JavaScript framework for building Single Page Applications.
-It's small (< 10kb gzip), fast and provides routing and XHR utilities out of the box.
+It's small ([size:mithril] gzip), fast and provides routing and XHR utilities out of the box.
 
 <div style="display:flex;margin:0 0 30px;">
 	<div style="width:50%;">
 		<h5>Download size</h5>
-		<small>Mithril.js (9.5kb)</small>
-		<div style="animation:grow 0.08s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:4%;"></div>
-		<small style="color:#aaa;">Vue + Vue-Router + Vuex + fetch (40kb)</small>
-		<div style="animation:grow 0.4s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:20%"></div>
-		<small style="color:#aaa;">React + React-Router + Redux + fetch (64kb)</small>
-		<div style="animation:grow 0.64s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:32%"></div>
-		<small style="color:#aaa;">Angular (135kb)</small>
-		<div style="animation:grow 1.35s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:68%"></div>
+		<small>Mithril.js ([size:mithril])</small>
+		<div class="demo-scale" style="animation-duration:[animSize:mithril];width:[pctSize:mithril]"></div>
+		<small style="color:#aaa;">Vue + Vue-Router + Vuex + fetch ([size:vue])</small>
+		<div class="demo-scale" style="animation-duration:[animSize:vue];width:[pctSize:vue]"></div>
+		<small style="color:#aaa;">React + React-Router + Redux + fetch ([size:react])</small>
+		<div class="demo-scale" style="animation-duration:[animSize:react];width:[pctSize:react]"></div>
+		<small style="color:#aaa;">Angular ([size:angular])</small>
+		<div class="demo-scale" style="animation-duration:[animSize:angular];width:[pctSize:angular]"></div>
 	</div>
 	<div style="width:50%;">
 		<h5>Performance</h5>
-		<small>Mithril.js (6.4ms)</small>
-		<div style="animation:grow 0.64s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:24%;"></div>
-		<small style="color:#aaa;">Vue (9.8ms)</small>
-		<div style="animation:grow 0.98s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:40%"></div>
-		<small style="color:#aaa;">React (12.1ms)</small>
-		<div style="animation:grow 1.21s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:48%"></div>
-		<small style="color:#aaa;">Angular (11.5ms)</small>
-		<div style="animation:grow 1.15s;background:#1e5799;height:3px;margin:0 10px 10px 0;transform-origin:0;width:44%"></div>
+		<small>Mithril.js ([time:mithril])</small>
+		<div class="demo-scale" style="animation-duration:[animTime:mithril];width:[pctTime:mithril]"></div>
+		<small style="color:#aaa;">Vue ([time:vue])</small>
+		<div class="demo-scale" style="animation-duration:[animTime:vue];width:[pctTime:vue]"></div>
+		<small style="color:#aaa;">React ([time:react])</small>
+		<div class="demo-scale" style="animation-duration:[animTime:react];width:[pctTime:react]"></div>
+		<small style="color:#aaa;">Angular ([time:angular])</small>
+		<div class="demo-scale" style="animation-duration:[animTime:angular];width:[pctTime:angular]"></div>
 	</div>
 </div>
 

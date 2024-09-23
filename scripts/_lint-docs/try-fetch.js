@@ -1,10 +1,8 @@
-"use strict"
+import * as http from "node:http"
+import * as https from "https"
 
-const http = require("http")
-const https = require("https")
-
-const {decodeResponse} = require("./decode-response.js")
-const {warnError, noop} = require("../_utils.js")
+import {noop, warnError} from "../_utils.js"
+import {decodeResponse} from "./decode-response.js"
 
 /**
  * Always returns a response object.
@@ -16,7 +14,7 @@ const {warnError, noop} = require("../_utils.js")
  *     sslError: boolean,
  * ) => void} callback
  */
-function tryFetch(url, callback) {
+export function tryFetch(url, callback) {
 	const maxResponseBytes = 64 * 1024
 	const maxTimeoutMs = 5000
 	const maxDelayMs = 10000
@@ -217,8 +215,4 @@ function tryFetch(url, callback) {
 	}
 
 	loop()
-}
-
-module.exports = {
-	tryFetch,
 }

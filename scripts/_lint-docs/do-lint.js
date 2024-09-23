@@ -1,32 +1,30 @@
-"use strict"
+import * as fs from "node:fs"
+import * as path from "node:path"
 
-const fs = require("fs")
-const path = require("path")
-
-const {submitTask} = require("./task-queue.js")
-const {processOne} = require("./process-file.js")
-const {root, rel, p, warnError} = require("../_utils.js")
+import {p, rel, root, terminateSignal, warnError} from "../_utils.js"
+import {processOne} from "./process-file.js"
+import {submitTask} from "./task-queue.js"
 
 const doNotVisit = /[\\/]node_modules(?:$|[\\/])|[\\/]docs[\\/](?:changelog|recent-changes|migration-[^\\/]*)\.md$/
 
 function lintOne(file, callback) {
 	let warnings = 0
 	let errors = 0
-	let files = 0
+	let visited = 0
 
 	let pending = 1
 
 	function settle() {
 		if (--pending === 0) {
-			callback(warnings, errors, files)
+			callback(warnings, errors, visited)
 		}
 	}
 
-	function visitNext(file, contents) {
+	function visitNext(current, contents) {
 		if (contents !== undefined) {
-			files++
+			visited++
 			pending++
-			processOne(file, contents, (w, e) => {
+			processOne(current, contents, (w, e) => {
 				warnings += w
 				errors += e
 				settle()
@@ -52,27 +50,27 @@ function lintOne(file, callback) {
 		}
 	}
 
-	function visit(file) {
-		if (file.endsWith(".md")) {
+	function visit(current) {
+		if (current.endsWith(".md")) {
 			pending++
-			submitTask(fs.readFile.bind(null, file, "utf8"), (err, contents) => {
+			submitTask(fs.readFile.bind(null, current, "utf8"), (err, contents) => {
 				// Not found is fine. Just ignore it.
 				if (!err || err.code === "EISDIR") {
-					visitNext(file, err ? undefined : contents)
+					visitNext(current, err ? undefined : contents)
 				} else if (err.code !== "ENOENT") {
 					warnError(err)
 				}
 				settle()
 			})
 		} else {
-			visitNext(file, undefined)
+			visitNext(current, undefined)
 		}
 	}
 
 	visit(file)
 }
 
-function lintAll() {
+export function lintAll() {
 	lintOne(root, (warnings, errors, files) => {
 		let problems = ""
 
@@ -121,7 +119,7 @@ function lintFile(file, callback) {
 	}
 }
 
-function lintWatch() {
+export function lintWatch() {
 	const timers = new Map()
 
 	const handleFileInner = (filename) => {
@@ -147,16 +145,11 @@ function lintWatch() {
 		fileBuffer = undefined
 	})
 
-	fs.watch(root, {recursive: true}, (_, filename) => {
+	fs.watch(root, {recursive: true, signal: terminateSignal()}, (_eventName, filename) => {
 		if (fileBuffer !== undefined) {
 			fileBuffer.push(filename)
 		} else {
 			handleFile(filename)
 		}
 	})
-}
-
-module.exports = {
-	lintAll,
-	lintWatch,
 }

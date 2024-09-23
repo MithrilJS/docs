@@ -52,6 +52,15 @@ h1 + ul strong + ul {border-left:3px solid #1e5799;}
 	to {transform:scaleX(100%)}
 }
 
+.demo-scale {
+	animation-name: grow;
+	animation-timing-function: linear;
+	background: #1e5799;
+	height: 3px;
+	margin: 0 10px 10px 0;
+	transform-origin: 0;
+}
+
 @media (max-width: 767px) {
 	.hamburger {display:block;font-size:30px;padding:0 10px;position:fixed;right:0;top:0;z-index:2;}
 	.hamburger:hover {text-decoration:none;}

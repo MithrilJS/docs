@@ -1,10 +1,8 @@
-"use strict"
-
-const fs = require("fs")
-const path = require("path")
+import * as fs from "node:fs"
+import * as path from "node:path"
 
 /** @param {(message?: string) => void} callback */
-function checkLocal(base, href, callback) {
+export function checkLocal(base, href, callback) {
 	const exec = (/^([^#?]*\.md)(?:$|\?|#)/).exec(href)
 	if (exec !== null) {
 		fs.access(path.join(base, exec[1]), (err) => {
@@ -15,8 +13,4 @@ function checkLocal(base, href, callback) {
 			}
 		})
 	}
-}
-
-module.exports = {
-	checkLocal,
 }

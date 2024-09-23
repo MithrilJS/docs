@@ -1,7 +1,9 @@
 <!--meta-description
-Official change log for Mithril.js
+Legacy change log for Mithril.js
 -->
-# Change log
+# Legacy changelog
+
+Newer versions' change logs, starting with v2.2.0, can be found [here](https://github.com/MithrilJS/mithril.js/releases).
 
 - [v2.0.4](#v204)
 - [v2.0.3](#v203)
@@ -16,50 +18,6 @@ Official change log for Mithril.js
 - [`mithril-stream` change log](#mithril-stream-change-log)
 
 ---
-
-<!--
-
-### Upcoming...
-
-*Note for later: release as semver-minor.*
-
-PSA: changes to [`mithril/stream`](stream.md) are now specified in this changelog. I've also moved the old stream changelog into this file [here](#mithril-stream-change-log).
-
-- Added `m.Fragment = "["` for an easier time with JSX setups. ([#2744](https://github.com/MithrilJS/mithril.js/pull/2744) [@dead-claudia](https://github.com/dead-claudia))
-- Reduced package download size substantially by removing the archive of previous releases' documentation. ([#2561](https://github.com/MithrilJS/mithril.js/pull/2561) [@cztomsik](https://github.com/cztomsik))
-- Improved error messages in multiple places. ([#2536](https://github.com/MithrilJS/mithril.js/pull/2536) [@dead-claudia](https://github.com/dead-claudia))
-- The redraw reentrancy check was moved from `m.mount` to `m.render` and its error message was updated accordingly. ([#2536](https://github.com/MithrilJS/mithril.js/pull/2536) [@dead-claudia](https://github.com/dead-claudia))
-    - This is unlikely to break people because if you were to do it with `m.render` directly before now, you'd corrupt Mithril.js' internal representation and internal errors could occur as a result. Now, it just warns you.
-- For a better debugging experience with `m.route` route resolvers, errors on `onmatch` in the default route are left unhandled and errors in `onmatch` in other routes are logged to the console before redirecting. ([#2536](https://github.com/MithrilJS/mithril.js/pull/2536) [@dead-claudia](https://github.com/dead-claudia))
-- Bug fix with `m.redraw` where if you removed a root that was previously visited in the current redraw pass, it would lose its place and skip the next root.
-- Add `params:` attribute to `m.route.Link`. ([#2537](https://github.com/MithrilJS/mithril.js/pull/2537) [@dead-claudia](https://github.com/dead-claudia))
-- Add `m.censor`. ([#2538](https://github.com/MithrilJS/mithril.js/pull/2538) [@dead-claudia](https://github.com/dead-claudia))
-- Re-add stream bundles. ([#2539](https://github.com/MithrilJS/mithril.js/pull/2539) [@dead-claudia](https://github.com/dead-claudia))
-- Remove extra isLifecycleMethod call from removeAttr. ([#2594](https://github.com/MithrilJS/mithril.js/pull/2594) [@ZeikJT](https://github.com/zeikjt))
-- Fix issue where ending a stream in the middle of a stream callback would result in erroneous parent stream state for the rest of that emit. ([#2603](https://github.com/MithrilJS/mithril.js/pull/2603) [@dead-claudia](https://github.com/dead-claudia))
-- Fix issue where new redraw handlers weren't copied over on update. ([#2578](https://github.com/MithrilJS/mithril.js/pull/2578) [@dead-claudia](https://github.com/dead-claudia))
-- Make changes to file inputs gracefully handled, and don't break if the current value and old value mismatch (and the new value isn't empty), but instead just log an error. ([#2578](https://github.com/MithrilJS/mithril.js/pull/2578) [@dead-claudia](https://github.com/dead-claudia))
-    - This mainly exists just to kick the can down the road - this is the only case I'm aware of where the DOM itself would be responsible for throwing an error. A proper fix to the greater issue of error handling is much more complex, and I'd rather not block users any longer over this one specific issue.
-- Allow Mithril.js to be loaded in non-browser environments without modification. ([#2633](https://github.com/MithrilJS/mithril.js/pull/2633) [@dead-claudia](https://github.com/dead-claudia))
-- Work around a bundler bug that corrupted RegExps [#2647](https://github.com/MithrilJS/mithril.js/issues/) ([#2655](https://github.com/MithrilJS/mithril.js/pull/2655))
-- Adapt handling of no content (204) responses to match XHR Spec ([#2624](https://github.com/MithrilJS/mithril.js/pull/2641)) [@Evoke-PHP](https://github.com/Evoke-PHP)
-- Add `URLSearchParams` support to `m.request` ([#2695](https://github.com/MithrilJS/mithril.js/pull/2695) [@Coteh](https://github.com/Coteh))
-- Standardise vnode text representation ([#2670](https://github.com/MithrilJS/mithril.js/pull/2670)) [@barneycarroll](https://github.com/barneycarroll)
-- API: Invalid escapes in routes are now safely handled. [@StephanHoyer](https://github.com/StephanHoyer) based on older [fix](https://github.com/MithrilJS/mithril.js/pull/2061) by [@dead-claudia](https://github.com/dead-claudia)
-- Use window and document from render target instead of using globals. ([#2897](https://github.com/MithrilJS/mithril.js/pull/2897))
-
-Important note: if you were using any of these undocumented tools, they are no longer available as of this release. This is not considered a breaking change as they were written for internal usage and as of v2 are all 100% unsupported in userland.
-
-- Mithril.js' internal bundler, previously available at `mithril/bundler`
-	- Prefer using a dedicated bundler like Webpack or Rollup instead.
-- Mithril.js' CommonJS sham polyfill, previously available at `mithril/module`
-	- Prefer using native `import`/`export` and/or Budo instead.
-- Mithril.js' internal test mocks, previously available at `mithril/test-utils`
-	- Prefer using JSDOM or similar instead.
-
-I'd like to apologize for missing these deprecations in the initial 2.0.0 change log. This was a major policy change we had been communicating the entire time and we should've let you all know this there in the change log as well.
-
--->
 
 ### v2.0.4
 _2019-08-18_

@@ -1,12 +1,5 @@
-#!/usr/bin/env node
-"use strict"
+import "./_improve-rejection-crashing.js"
 
-require("./_improve-rejection-crashing.js")
+import {lintAll} from "./_lint-docs/do-lint.js"
 
-const {lintAll, lintWatch} = require("./_lint-docs/do-lint.js")
-
-if (process.argv.includes("--watch", 2)) {
-	lintWatch()
-} else {
-	lintAll()
-}
+lintAll()

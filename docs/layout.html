@@ -10,11 +10,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="[metaDescription]">
 	</head>
-	<body onload="window.requestAnimationFrame(function(){document.getElementById('archive-docs').selectedIndex = 0})" /* handle back navigation */>
+	<body>
 		<header>
 			<section>
 				<a class="hamburger" href="javascript:;">≡</a>
-				<h1><img src="logo.svg"> Mithril [archive-docs]</h1>
+				<h1><img src="logo.svg">Mithril v[version]</h1>
 				<nav>
 					<a href="index.html">Guide</a>
 					<a href="api.html">API</a>
@@ -33,7 +33,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-jsx.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-diff.min.js"></script>
-		<script src="https://unpkg.com/mithril@[version]/mithril.js" async></script>
+		<script src="mithril.js" async></script>
 		<script src="https://flems.io/flems.html" id="flems" defer></script>
 		<script>
 		document.querySelector(".hamburger").onclick = function() {

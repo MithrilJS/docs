@@ -1,6 +1,4 @@
-"use strict"
-
-const {tryFetch} = require("./try-fetch.js")
+import {tryFetch} from "./try-fetch.js"
 
 function checkKnownCorrectRequestFail(href, headers, status, body) {
 	if (status >= 400 && status <= 499) {
@@ -53,6 +51,7 @@ function checkHttpInner(href, callback) {
 		}
 
 		url.protocol = "http:"
+		// eslint-disable-next-line no-shadow
 		tryFetch(url, (headers, status, body) => {
 			if (status >= 200 && status <= 299) {
 				if (isHTTPS) {
@@ -74,7 +73,7 @@ const urlCache = new Map()
  * Returns `undefined` if no error, a string if an error does occur.
  * @param {(message?: string) => void} callback
  */
-function checkHttp(href, callback) {
+export function checkHttp(href, callback) {
 	if (href.includes("#")) {
 		process.exitCode = 1
 		callback(`Expected href to be sanitized of hashes, but found ${href}`)
@@ -93,13 +92,9 @@ function checkHttp(href, callback) {
 		checkHttpInner(href, (message) => {
 			urlCache.set(href, message)
 			process.nextTick(callback, message)
-			for (const callback of queue) {
-				process.nextTick(callback, message)
+			for (const receiver of queue) {
+				process.nextTick(receiver, message)
 			}
 		})
 	}
-}
-
-module.exports = {
-	checkHttp,
 }

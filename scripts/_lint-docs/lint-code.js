@@ -1,8 +1,6 @@
-"use strict"
-
 // Accept just about anything by using Babel's parser.
 
-const babelParser = require("@babel/parser")
+import * as babelParser from "@babel/parser"
 
 function getJsonError(code) {
 	try {
@@ -128,7 +126,7 @@ function lintCodeCommentStyle(codeErrors, langEntry, code) {
 	}
 }
 
-function getCodeLintErrors(code, lang) {
+export function getCodeLintErrors(code, lang) {
 	const langEntry = lookupLang(lang)
 	const error = langEntry?.getError(code)
 	const codeErrors = []
@@ -138,8 +136,4 @@ function getCodeLintErrors(code, lang) {
 	lintCodeCommentStyle(codeErrors, langEntry, code)
 
 	return codeErrors
-}
-
-module.exports = {
-	getCodeLintErrors,
 }

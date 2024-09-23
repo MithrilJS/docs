@@ -1,43 +1,30 @@
-"use strict"
-
 // CI needs a much lower limit so it doesn't hang.
 const maxConcurrency = process.env.CI === "true" ? 5 : 20
 
 const queue = []
 let running = 0
 
-function runTask(task, callback) {
-	process.nextTick(task, (...args) => {
-		process.nextTick(callback, ...args)
-		if (running === maxConcurrency && queue.length !== 0) {
-			const [nextTask, nextCallback] = queue.splice(0, 2)
-			runTask(nextTask, nextCallback)
+function runTask(task) {
+	process.nextTick(task, () => {
+		if (running === maxConcurrency) {
+			const nextTask = queue.shift()
+			if (typeof nextTask === "function") runTask(nextTask)
 		}
 	})
 }
 
 /**
- * @template {any[]} A
- * @param {(callback: (...args: A) => void) => void} task
- * @param {(...args: A) => void} callback
+ * @param {(callback: () => void) => void} task
  */
-function submitTask(task, callback) {
+export function submitTask(task) {
 	if (typeof task !== "function") {
 		throw new TypeError("`task` must be a function")
 	}
 
-	if (typeof callback !== "function") {
-		throw new TypeError("`callback` must be a function")
-	}
-
 	if (running < maxConcurrency) {
 		running++
-		runTask(task, callback)
+		runTask(task)
 	} else {
-		queue.push(task, callback)
+		queue.push(task)
 	}
-}
-
-module.exports = {
-	submitTask,
 }

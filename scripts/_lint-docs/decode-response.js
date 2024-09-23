@@ -1,7 +1,9 @@
 // Disabling this globally as I use it a lot to speed up common operations and cut down on
 // duplicate comparisons.
 /* eslint-disable no-bitwise */
-"use strict"
+
+// I'm only decoding win-1252 because it's the fallback for when the character set isn't specified
+// and UTF-8 and UTF-16 can't be inferred.
 
 const win1252Map = [
 	0x20AC,
@@ -48,12 +50,12 @@ function decode(buffer, encoding) {
 		case "win1252":
 			encoding = "latin1"
 			for (let i = 0; i < buffer.length; i++) {
-				const value = buffer[i]
+				let value = buffer[i]
 				if ((value & 0xE0) === 0x80) {
 					const u16 = new Uint16Array(buffer.length)
 					u16.set(buffer.subarray(0, i), 0)
 					for (; i < buffer.length; i++) {
-						const value = buffer[i]
+						value = buffer[i]
 						const mask = -((value & 0xE0) === 0x80)
 						u16[i] = value & ~mask | win1252Map[value & 0x1F] & mask
 					}
@@ -114,7 +116,7 @@ function extractNamedEncoding(name) {
 			let ch = expected.charCodeAt(i)
 			const upper = ch & ~0x20
 			if (upper >= 0x41 && upper <= 0x5A) ch = upper
-			if (name.charCodeAt(i) !== expected) continue outer
+			if (name.charCodeAt(i) !== ch) continue outer
 		}
 		return entry[0]
 	}
@@ -235,10 +237,6 @@ function detectEncoding(headers, prefix) {
 	return "win1252"
 }
 
-function decodeResponse(headers, body) {
+export function decodeResponse(headers, body) {
 	return decode(body, detectEncoding(headers, body.subarray(0, 1024)))
-}
-
-module.exports = {
-	decodeResponse,
 }
