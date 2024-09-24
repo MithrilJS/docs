@@ -20,9 +20,14 @@ Contribution guide for Mithril.js
 
 ## How do I go about contributing ideas or new features?
 
-Create an [issue thread on GitHub](https://github.com/MithrilJS/mithril.js/issues/new) to suggest your idea so the community can discuss it.
+Go to our [discussions forum](https://github.com/MithrilJS/mithril.js/discussions) to suggest your idea so the community can discuss it.
 
-If the consensus is that it's a good idea, the fastest way to get it into a release is to send a pull request. Without a PR, the time to implement the feature will depend on the bandwidth of the development team and its list of priorities.
+If the consensus is that it's a good idea, the fastest way to get it published is to send a pull request. Without a PR, the time to implement the feature will depend on the bandwidth of the development team and its list of priorities.
+
+Here's where you would submit that pull request:
+
+- Mithril.js core: https://github.com/MithrilJS/mithri.js
+- Mithril.js documentation: https://github.com/MithrilJS/docs
 
 
 
