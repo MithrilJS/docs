@@ -88,6 +88,7 @@ export async function makeGenerator() {
 	])
 
 	async function compilePage(file, markdown) {
+		const filePath = rel(file)
 		file = path.basename(file)
 		const fileLink = new RegExp(`([ \t]*)(- )(\\[.+?\\]\\(${escapeRegExp(file)}\\))`)
 		const src = fileLink.test(guides) ? guides : methods
@@ -178,6 +179,9 @@ export async function makeGenerator() {
 				return `<h${n} id="${anchor}"><a href="#${anchor}">${text}</a></h${n}>`
 			}
 		)
+
+		// Insert source file edit path
+		result = result.replaceAll("[editPath]", filePath)
 
 		return result
 	}

@@ -5,7 +5,7 @@ header section {position:absolute;width:250px;}
 nav a {border-left:1px solid #ddd;padding:0 10px;}
 nav a:first-child {border:0;padding-left:0;}
 main {margin-bottom:100px;}
-main section {margin-left:270px;}
+.body {margin-left:270px;}
 p {margin:0 0 15px;}
 pre,code {background:#eee;font-family:monospace;font-size:14px;}
 pre {border-left:3px solid #1e5799;overflow:auto;padding:10px 20px;margin:20px 0;}
@@ -45,6 +45,10 @@ h1 + ul li:last-child {border-bottom:0;}
 h1 + ul ul {margin:0 0 2px;padding:0 0 0 15px;}
 h1 + ul ul li {border:0;}
 h1 + ul strong + ul {border-left:3px solid #1e5799;}
+.footer {position:relative;border-top:1px solid #ddd;padding:15px 0;margin:15px 0;}
+.footer > * {position:absolute;font-size:80%;}
+.footer > :first-child {left:0;}
+.footer > :last-child {right:0;}
 
 .hamburger {display:none;}
 
@@ -65,7 +69,7 @@ h1 + ul strong + ul {border-left:3px solid #1e5799;}
 @media (max-width: 767px) {
 	.hamburger {display:block;font-size:30px;padding:0 10px;position:fixed;right:0;top:0;z-index:2;}
 	.hamburger:hover {text-decoration:none;}
-	main section {margin:0;}
+	.body {margin:0;}
 	header section {margin:0 0 20px;position:static;width:auto;}
 	h1 + ul {background:#eee;border:1px solid #ccc;box-sizing:border-box;display:none;height:100%;margin:0;overflow:auto;padding:20px;position:fixed;right:0;top:0;width:100%;z-index:1}
 	h1 + ul + hr {display:block;}
@@ -96,7 +100,7 @@ h1 + ul strong + ul {border-left:3px solid #1e5799;}
 }
 @media print {
 	nav,h1 + ul {display:none;}
-	main section {margin:0;}
+	.body {margin:0;}
 }
 
 /* prism theming */
