@@ -32,14 +32,6 @@ TypeScript type definitions are available from DefinitelyTyped. They can be inst
 $ npm install @types/mithril --save-dev
 ```
 
-For example usage, to file issues or to discuss TypeScript related topics visit: https://github.com/MithrilJS/mithril.d.ts
-
-Type definitions for pre-release versions of Mithril.js (on the `next` branch) align with the `next` branch of the [types development repo](https://github.com/MithrilJS/mithril.d.ts/tree/next). You can install these types with:
-
-```bash
-$ npm install -D MithrilJS/mithril.d.ts#next
-```
-
 ---
 
 ### Create a project locally
