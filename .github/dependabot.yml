@@ -7,17 +7,11 @@ updates:
     allow:
       - dependency-name: mithril
         dependency-type: production
-    assignees:
-      - dead-claudia
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
-    assignees:
-      - dead-claudia
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
-    assignees:
-      - dead-claudia
