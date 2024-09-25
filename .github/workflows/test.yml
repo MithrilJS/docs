@@ -1,7 +1,7 @@
 name: test
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [main]
   push:
     branches: [main]
@@ -11,17 +11,9 @@ on:
 permissions:
   contents: read
 
-# This uses actions/checkout instead of `git clone` directly since it's way
-# easier than parsing everything out.
-
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    - run: npm ci
-    - run: npm run lint
-    - run: npm run build
+    uses: MithrilJS/infra/.github/workflows/run-tests.yml@main
+    with:
+      all-platforms: true
+      all-versions: true
