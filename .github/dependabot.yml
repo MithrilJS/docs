@@ -11,7 +11,21 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      security:
+        applies-to: security-updates
+        patterns: ['*']
+      normal:
+        applies-to: version-updates
+        patterns: ['*']
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      security:
+        applies-to: security-updates
+        patterns: ['*']
+      normal:
+        applies-to: version-updates
+        patterns: ['*']
