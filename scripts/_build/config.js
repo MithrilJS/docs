@@ -1,4 +1,8 @@
-export const sources = {
+const debugSources = {
+	"": "docs",
+}
+
+const allSources = {
 	"": "docs",
 	"archive": "archive",
 	"mithril.js": "node_modules/mithril/mithril.js",
@@ -6,6 +10,8 @@ export const sources = {
 	"stream.js": "node_modules/mithril/stream/stream.js",
 	"stream.min.js": "node_modules/mithril/stream/stream.min.js",
 }
+
+export const sources = process.argv.includes("--debug", 2) ? debugSources : allSources
 
 export const defaultMetaDescription = "Mithril.js Documentation"
 export const metaDescriptionRegExp = /<!--meta-description\n([\s\S]+?)\n-->/m
