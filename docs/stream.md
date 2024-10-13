@@ -180,7 +180,7 @@ Specifies how the value of a computed stream is generated. See [combining stream
 
 Argument     | Type                 | Required | Description
 ------------ | -------------------- | -------- | ---
-`streams...` | splat of `Streams`   | No       | Splat of zero or more streams that correspond to the streams passed to [`stream.lift`](#stream-lift)
+`streams...` | splat of `Streams`   | No       | Splat of zero or more values that correspond to the values of the streams passed to [`stream.lift`](#stream-lift)
 **returns**  | `any`                |          | Returns a computed value
 
 [How to read signatures](signatures.md)
