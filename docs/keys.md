@@ -16,6 +16,7 @@ Documentation on the special "key" attribute in Mithril.js, which tracks vnodes'
 	- [Mixing key types](#mixing-key-types)
 	- [Hiding keyed elements with holes](#hiding-keyed-elements-with-holes)
 	- [Duplicate keys](#duplicate-keys)
+	- [Using objects for keys](#using-objects-for-keys)
 
 ---
 
@@ -551,3 +552,16 @@ var things = [
 ```
 
 Mithril.js uses an empty object to map keys to indices to know how to properly patch keyed fragments. When you have a duplicate key, it's no longer clear where that element moved to, and so Mithril.js will break in that circumstance and do unexpected things on update, especially if the list changed. Distinct keys are required for Mithril.js to properly connect old to new nodes, so you must choose something locally unique to use as a key.
+
+#### Using objects for keys
+
+Keys for fragment items are treated as property keys. Stuff like this will not work like you think it will.
+
+```javascript
+// AVOID
+things.map(function(thing) {
+	return m(Thing, {key: thing, thing: thing})
+})
+```
+
+If you have a `toString` method on it, that would get called, and you'd be at the mercy of whatever it returns, possibly not realizing that method is even being called. If you don't, all your objects will stringify to `"[object Object]"` and thus you'll have a nasty [duplicate key](#duplicate-keys) problem.
