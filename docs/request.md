@@ -475,6 +475,37 @@ The parameter to `options.extract` is the XMLHttpRequest object once its operati
 
 ---
 
+### Issuing fetches to IP addresses
+
+Due to the (very simplistic) way parameters are detected in URLs, IPv6 address segments are confused as path parameter interpolations, and as path parameters need something to separate them to be interpolated correctly, this results in an error being thrown.
+
+```javascript
+// This doesn't work
+m.request("http://[2001:db8::990a:cd27:4d9e:79]:8080/some/path", {
+    // ...
+})
+```
+
+To work around this, you should pass the IPv6 address + port pair as a parameter instead.
+
+```javascript
+m.request("http://:host/some/path", {
+    params: {host: "[2001:db8::990a:cd27:4d9e:79]:8080"},
+    // ...
+})
+```
+
+This is not an issue with IPv4 addresses, and you can use those normally.
+
+```javascript
+// This will work as you expect
+m.request("http://192.0.2.15:8080/some/path", {
+    // ...
+})
+```
+
+---
+
 ### Why JSON instead of HTML
 
 Many server-side frameworks provide a view engine that interpolates database data into a template before serving HTML (on page load or via AJAX) and then employ jQuery to handle user interactions.
