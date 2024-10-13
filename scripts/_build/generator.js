@@ -117,7 +117,27 @@ export async function makeGenerator() {
 		// fix links
 		body = body.replace(/\]\((?!\w+:\/\/)(.+?)\.md\)/gim, "]($1.html)")
 
-		const markedHtml = marked(body)
+		let markedHtml = marked(body)
+
+		// inject anchors
+		const anchorIds = new Map()
+
+		markedHtml = markedHtml.replace(
+			/<h([2-5])>(.+?)<\/h\1>/gim,
+			(_match, n, text) => {
+				let anchor = text.toLowerCase()
+					.replace(/<\/?code>/g, "")
+					.replace(/<a.*?>.+?<\/a>/g, "")
+					.replace(/[.`[\]/()]|&quot;/g, "")
+					.replace(/\s/g, "-")
+
+				const anchorId = anchorIds.get(anchor)
+				anchorIds.set(anchor, anchorId != null ? anchorId + 1 : 0)
+				if (anchorId != null) anchor += anchorId
+				return `<h${n} id="${anchor}"><a href="#${anchor}">${text}</a></h${n}>`
+			}
+		)
+
 		const title = body.match(/^#\s+([^\n\r]+)/m) || []
 
 		let result = layout
@@ -160,25 +180,6 @@ export async function makeGenerator() {
 				result = result.replaceAll(`[animTime:${key}]`, `${round(time / 10)}s`)
 			}
 		}
-
-		// fix anchors
-		const anchorIds = new Map()
-
-		result = result.replace(
-			/<h([1-6]) id="[^"]+">(.+?)<\/h\1>/gim,
-			(_match, n, text) => {
-				let anchor = text.toLowerCase()
-					.replace(/<\/?code>/g, "")
-					.replace(/<a.*?>.+?<\/a>/g, "")
-					.replace(/[.`[\]/()]|&quot;/g, "")
-					.replace(/\s/g, "-")
-
-				const anchorId = anchorIds.get(anchor)
-				anchorIds.set(anchor, anchorId != null ? anchorId + 1 : 0)
-				if (anchorId != null) anchor += anchorId
-				return `<h${n} id="${anchor}"><a href="#${anchor}">${text}</a></h${n}>`
-			}
-		)
 
 		// Insert source file edit path
 		result = result.replaceAll("[editPath]", filePath)
