@@ -182,7 +182,7 @@ m("input[readonly]")
 m("input[readOnly]")
 ```
 
-This even includes custom elements. For example, you can use [A-Frame](https://aframe.io/docs/0.8.0/introduction/) within Mithril.js, no problem!
+This even includes custom elements. For example, you can use [A-Frame](https://aframe.io/docs/1.6.0/introduction/) within Mithril.js, no problem!
 
 ```javascript
 m("a-scene", [
@@ -217,17 +217,6 @@ m("a-scene", [
 		color: "#ECECEC",
 	}),
 ])
-```
-
-And yes, this translates to both attributes and properties, and it works just like they would in the DOM. Using Brick's `brick-deck` (DEAD LINK, FIXME: http //brick.mozilla.io/docs/brick-deck) as an example, they have a `selected-index` attribute with a corresponding `selectedIndex` getter/setter property.
-
-```javascript
-m("brick-deck[selected-index=0]", [/* ... */]) // lowercase
-m("brick-deck[selectedIndex=0]", [/* ... */]) // uppercase
-// I know these look odd, but `brick-deck`'s `selectedIndex` property is a
-// string, not a number.
-m("brick-deck", {"selected-index": "0"}, [/* ... */])
-m("brick-deck", {"selectedIndex": "0"}, [/* ... */])
 ```
 
 For custom elements, it doesn't auto-stringify properties, in case they are objects, numbers, or some other non-string value. So assuming you had some custom element `my-special-element` that has an `elem.whitelist` array getter/setter property, you could do this, and it'd work as you'd expect:
