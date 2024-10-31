@@ -317,7 +317,7 @@ class ComponentWithState {
 	}
 	view() {
 		return m("div",
-			m("p", "Count: " + count),
+			m("p", "Count: ", this.count),
 			m("button", {
 				onclick: () => {this.increment()}
 			}, "Increment"),
