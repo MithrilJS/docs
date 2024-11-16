@@ -26,7 +26,7 @@ If the consensus is that it's a good idea, the fastest way to get it published i
 
 Here's where you would submit that pull request:
 
-- Mithril.js core: https://github.com/MithrilJS/mithri.js
+- Mithril.js core: https://github.com/MithrilJS/mithril.js
 - Mithril.js documentation: https://github.com/MithrilJS/docs
 
 
