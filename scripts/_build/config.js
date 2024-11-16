@@ -5,6 +5,7 @@ const debugSources = {
 const allSources = {
 	"": "docs",
 	"archive": "archive",
+	"examples": "examples",
 	"mithril.js": "node_modules/mithril/mithril.js",
 	"mithril.min.js": "node_modules/mithril/mithril.min.js",
 	"stream.js": "node_modules/mithril/stream/stream.js",
