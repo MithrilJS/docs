@@ -115,7 +115,7 @@ export async function makeGenerator() {
 		)
 
 		// fix links
-		body = body.replace(/\]\((?!\w+:\/\/)(.+?)\.md\)/gim, "]($1.html)")
+		body = body.replace(/\]\((?!\w+:\/\/)(.+?)\.md([)#])/gim, "]($1.html$2")
 
 		let markedHtml = marked(body)
 
