@@ -6,7 +6,7 @@ Documentation on the special "key" attribute in Mithril.js, which tracks vnodes'
 
 - [What are keys?](#what-are-keys?)
 	- [Key restrictions](#key-restrictions)
-- [Linking model data in lists of views](#linking-model-data-to-views)
+- [Linking model data in lists of views](#linking-model-data-in-lists-of-views)
 - [Keeping collections of animated objects glitch-free](#keeping-collections-of-animated-objects-glitch-free)
 - [Reinitializing views with single-child keyed fragments](#reinitializing-views-with-single-child-keyed-fragments)
 - [Common gotchas](#common-gotchas)
