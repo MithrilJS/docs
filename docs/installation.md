@@ -4,9 +4,9 @@ Instructions on how to install Mithril.js
 
 # Installation
 
-- [CDN and online playground](#cdn)
+- [CDN and online playground](#cdn-and-online-playground)
 - [npm](#npm)
-- [Quick start with Webpack](#quick-start-with-webpack)
+- [Quick start with esbuild](#quick-start-with-esbuild)
 
 ### CDN and online playground
 
@@ -56,7 +56,9 @@ npm install
 npm run dev
 ```
 
-### Quick start with [esbuild](https://esbuild.github.io/)
+### Quick start with esbuild
+
+> esbuild documentation can be found [here](https://esbuild.github.io/).
 
 1. Initialize the directory as an npm package.
 ```bash
