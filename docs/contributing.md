@@ -14,7 +14,6 @@ Contribution guide for Mithril.js
 - [Why does Mithril.js use its own testing framework and not Mocha/Jasmine/Tape?](#why-does-mithriljs-use-its-own-testing-framework-and-not-mochajasminetape?)
 - [Why doesn't the Mithril.js codebase use ES6 via Babel or Bublé? Would a PR to upgrade be welcome?](#why-doesn't-the-mithril-codebase-use-es6-via-babel-or-bublé?-would-a-pr-to-upgrade-be-welcome?)
 - [Why doesn't the Mithril.js codebase use trailing semi-colons? Would a PR to add them be welcome?](#why-doesn't-the-mithriljs-codebase-use-trailing-semi-colons?-would-a-pr-to-add-them-be-welcome?)
-- [Why does the Mithril.js codebase use a mix of `instanceof` and `typeof` checks instead of `Object.prototype.toString.call`, `Array.isArray`, etc? Would a PR to refactor those checks be welcome?](#why-does-the-mithriljs-codebase-use-a-mix-of-instanceof-and-typeof-checks-instead-of-objectprototypetostringcall,-arrayisarray,-etc?-would-a-pr-to-refactor-those-checks-be-welcome?)
 - [What should I know in advance when attempting a performance related contribution?](#what-should-i-know-in-advance-when-attempting-a-performance-related-contribution?)
 - [Do you all accept donations?](#do-you-all-accept-donations?)
 
@@ -105,14 +104,6 @@ Being able to run Mithril.js' raw source code in all supported browsers is a req
 ## Why doesn't the Mithril.js codebase use trailing semi-colons? Would a PR to add them be welcome?
 
 I don't use them. Adding them means the semi-colon usage in the codebase will eventually become inconsistent. Besides, [we aren't the only one who've decided to drop the semicolon](https://standardjs.com/#who-uses-javascript-standard-style). (We don't use Standard, though.)
-
-
-
-## Why does the Mithril.js codebase use a mix of `instanceof` and `typeof` checks instead of `Object.prototype.toString.call`, `Array.isArray`, etc? Would a PR to refactor those checks be welcome?
-
-Mithril.js avoids peeking at objects' [[class]] string for performance considerations. Many type checks are seemingly inconsistent, weird or convoluted because those specific constructs demonstrated the best performance profile in benchmarks compared to alternatives.
-
-Type checks are generally already irreducible expressions and having micro-modules for type checking subroutines would add maintenance overhead.
 
 
 
