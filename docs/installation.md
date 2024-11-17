@@ -58,7 +58,7 @@ npm run dev
 
 ### Quick start with esbuild
 
-> esbuild documentation can be found [here](https://esbuild.github.io/).
+*esbuild documentation can be found [here](https://esbuild.github.io/).*
 
 1. Initialize the directory as an npm package.
 ```bash
