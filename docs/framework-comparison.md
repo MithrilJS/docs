@@ -5,7 +5,7 @@ Detailed comparison between Mithril.js and other popular frameworks
 # Framework comparison
 
 - [Why not X?](#why-not-insert-favorite-framework-here?)
-- [Why use Mithril.js?](#why-use-mithril?)
+- [Why use Mithril.js?](#why-use-mithriljs?)
 - [React](#react)
 - [Angular](#angular)
 - [Vue](#vue)
@@ -213,8 +213,8 @@ Mithril.js has far less concepts and typically organizes applications in terms o
 
 Both Vue and Mithril.js have good documentation. Both include a good API reference with examples, tutorials for getting started, as well as pages covering various advanced concepts.
 
-However, due to Vue's many-ways-to-do-one-thing approach, some things may not be adequately documented. For example, there's no documentation on hyperscript syntax or usage.
+However, due to Vue's many-ways-to-do-one-thing approach, some things may not be adequately documented. [For example, their hyperscript is heavily glossed over.](https://vuejs.org/guide/extras/render-function.html)
 
 Mithril.js documentation typically errs on the side of being overly thorough if a topic involves things outside of the scope of Mithril. For example, when a topic involves a 3rd party library, Mithril.js documentation walks through the installation process for the 3rd party library. Mithril.js documentation also often demonstrates simple, close-to-the-metal solutions to common use cases in real-life applications where it's appropriate to inform a developer that web standards may be now on par with larger established libraries.
 
-Mithril.js' tutorials also cover a lot more ground than Vue's: the [Vue tutorial](https://vuejs.org/v2/guide/#Getting-Started) finishes with a static list of foodstuff. [Mithril.js' 10 minute guide](index.md) covers the majority of its API and goes over key aspects of real-life applications, such as fetching data from a server and routing (and there's a [longer, more thorough tutorial](simple-application.md) if that's not enough).
+Mithril.js' tutorials also cover a lot more ground than Vue's: the [Vue tutorial](https://vuejs.org/guide/essentials/application.html) finishes with a simple local todo list, after going through several pages to cover its large core API. [Mithril.js' 10 minute guide](index.md) covers the majority of its API and even goes over key aspects of real-life applications, such as fetching data from a server and routing. If that's not enough, there's a [longer, more thorough tutorial](simple-application.md) as well.
