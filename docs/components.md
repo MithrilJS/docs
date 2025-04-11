@@ -558,7 +558,7 @@ var TaskItem = {
 }
 ```
 
-Also consider using a single attribute instead of forwarding them directly. It may make for clearer, cleaner code in some cases.
+Also, consider using a single attribute instead of forwarding them directly. It may make for clearer, cleaner code in some cases.
 
 ```javascript
 // PREFER
