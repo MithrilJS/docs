@@ -485,7 +485,80 @@ var MyModal = {
 }
 ```
 
-Instead, you should forward *single* attributes into vnodes:
+You could also run into errors if the element you're forwarding it to is in a fragment:
+
+```javascript
+// AVOID
+var TaskItem = {
+	// ...
+	view: function(vnode) {
+		return [
+			m(".TaskList__TaskItem.Layout__Container", vnode.attrs, [
+				//       forwarding `vnode.attrs` here ^
+				// ...
+			]),
+			m(".TaskList__TaskButtons.Layout__Container", [
+				// ...
+			]),
+		]
+	}
+}
+
+var MyList = {
+	view: function() {
+		return m("div.TaskList__Container",
+			Model.taskItems().map(function(item) {
+				return m(TaskItem, {
+					// This attribute gets forwarded to the
+					// first element returned by `TaskItem`.
+					// This makes the element keyed, and thus
+					// causes the fragment it's in to have a
+					// mix of keyed and unkeyed elements.
+					//
+					// Mithril checks for such mixed keys in
+					// its vnode factories, and so you'd see
+					// an error thrown.
+					key: item.id,
+					// ...
+				})
+			})
+		)
+	}
+}
+```
+
+Instead, you should use [`m.censor`](censor.md) to remove all the problem lifecycle methods and attributes:
+
+```javascript
+// PREFER
+var Modal = {
+	// ...
+	view: function(vnode) {
+		return m(".modal[tabindex=-1][role=dialog]", m.censor(vnode.attrs), [
+			//                  forwarding `vnode.attrs` here ^
+			// ...
+		])
+	}
+}
+
+// PREFER
+var TaskItem = {
+	// ...
+	view: function(vnode) {
+		return [
+			m(".TaskList__TaskItem.Layout__Container", m.censor(vnode.attrs), [
+				//                forwarding `vnode.attrs` here ^
+				// ...
+			]),
+			m(".TaskList__TaskButtons.Layout__Container", [
+				// ...
+			]),
+		]
+	}
+}
+```
+
+Also consider using a single attribute instead of forwarding them directly. It may make for clearer, cleaner code in some cases.
 
 ```javascript
 // PREFER
