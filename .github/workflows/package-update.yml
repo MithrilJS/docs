@@ -33,7 +33,7 @@ jobs:
         updated="(jq --indent 2 \
           --arg pkg "$PKG" --arg version "$VERSION" \
           '.dependencies[$pkg] = $version' \
-          < package.json)"
+          package.json)"
         printf '%s' "$updated" > package.json
       env:
         PKG: ${{ inputs.package }}
