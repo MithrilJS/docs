@@ -1,0 +1,57 @@
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: The package to check for updates for
+        type: choice
+        required: true
+        options:
+        - mithril
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Get current package version
+      id: view
+      run: echo "version=$(npm view "$PKG"@latest version)" | tee $GITHUB_OUTPUT
+      env:
+        PKG: ${{ inputs.package }}
+    - name: Update package.json
+      run: >
+        set -euo pipefail
+        updated="(jq --indent 2 \
+          --arg pkg "$PKG" --arg version "$VERSION" \
+          '.dependencies[$pkg] = $version' \
+          < package.json)"
+        printf '%s' "$updated" > package.json
+      env:
+        PKG: ${{ inputs.package }}
+        VERSION: ${{ steps.view.version }}
+    - name: Update package-lock.json
+      run: npm update "$PKG" --lock-file-only
+      env:
+        PKG: ${{ inputs.package }}
+    - name: Commit and push changes
+      run: >
+        set -euo pipefail
+        if git diff-index --quiet --cached HEAD; then
+          echo '::warning::No changes detected. Skipping push.'
+        else
+          git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
+          git config --global user.email "$ACTOR@users.noreply.github.com"
+          git commit --all --message "Update $PKG to $VERSION"
+          git push
+        fi
+      env:
+        PKG: ${{ inputs.package }}
+        VERSION: ${{ steps.view.version }}
+        ACTOR: ${{ github.actor }}
+        TRIGGERING_ACTOR: ${{ github.triggering_actor }}
