@@ -34,7 +34,7 @@ jobs:
           --arg pkg "$PKG" --arg version "$VERSION" \
           '.dependencies[$pkg] = $version' \
           package.json)"
-        printf '%s' "$updated" > package.json
+        printf '%s' "${updated}" > package.json
       env:
         PKG: ${{ inputs.package }}
         VERSION: ${{ steps.view.version }}
