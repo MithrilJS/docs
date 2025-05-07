@@ -28,16 +28,15 @@ jobs:
       env:
         PKG: ${{ inputs.package }}
     - name: Update package.json
-      run: >
-        set -euo pipefail
-        updated="(jq --indent 2 \
-          --arg pkg "$PKG" --arg version "$VERSION" \
-          '.dependencies[$pkg] = $version' \
-          package.json)"
-        printf '%s' "${updated}" > package.json
+      run: node -e "$SCRIPT"
       env:
         PKG: ${{ inputs.package }}
         VERSION: ${{ steps.view.version }}
+        SCRIPT: >
+          const {PKG, VERSION} = process.env
+          const pkg = JSON.parse(fs.readFileSync("package.json"))
+          pkg.dependencies[PKG] = VERSION
+          fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2))
     - name: Update package-lock.json
       run: npm update "$PKG" --lock-file-only
       env:
