@@ -52,7 +52,7 @@ jobs:
           git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
           git config --global user.email "$ACTOR@users.noreply.github.com"
           git commit --message "Update $PKG to $VERSION"
-          gh pr create --fill --label automated
+          git push --force
         else
           echo '::warning::No changes detected. Skipping push.'
         fi
