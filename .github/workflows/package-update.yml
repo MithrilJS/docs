@@ -61,3 +61,4 @@ jobs:
         VERSION: ${{ steps.view.outputs.version }}
         ACTOR: ${{ github.actor }}
         TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+        GH_TOKEN: ${{ github.token }}
