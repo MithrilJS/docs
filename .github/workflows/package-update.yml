@@ -28,32 +28,40 @@ jobs:
       env:
         PKG: ${{ inputs.package }}
     - name: Update package.json
+      id: update
       run: node -e "$SCRIPT"
       env:
         PKG: ${{ inputs.package }}
         VERSION: ${{ steps.view.outputs.version }}
         SCRIPT: |
-          const {PKG, VERSION} = process.env
+          const {PKG, VERSION, GITHUB_OUTPUT} = process.env
           if (!PKG) throw new Error("Missing $PKG")
           if (!VERSION) throw new Error("Missing $VERSION")
-          const pkg = JSON.parse(fs.readFileSync("package.json"))
+          const pkg = JSON.parse(fs.readFileSync("package.json")
           console.log(`old version=${pkg.dependencies[PKG]}`)
-          pkg.dependencies[PKG] = VERSION
-          fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2)+"\n")
+          if (pkg.dependencies[PKG] === VERSION) {
+            fs.writeFileSync(GITHUB_OUTPUT, "commit=n")
+            console.log("Package version not changed. Skipping push.")
+          } else {
+            pkg.dependencies[PKG] = VERSION
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2)+"\n")
+            fs.writeFileSync(GITHUB_OUTPUT, "commit=y")
+            console.log("Package version updated.")
+          }
     - name: Update package-lock.json
+      if: ${{ steps.update.outputs.commit == "y" }}
       run: npm update "$PKG" --lock-file-only
       env:
         PKG: ${{ inputs.package }}
     - name: Commit changes
+      if: ${{ steps.update.outputs.commit == "y" }}
       id: commit
       run: |
         set -euo pipefail
-        echo commit=n > $GITHUB_OUTPUT
         if git add package.json package-lock.json; then
           git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
           git config --global user.email "$ACTOR@users.noreply.github.com"
           git commit --message "Update $PKG to $VERSION"
-          echo commit=y > $GITHUB_OUTPUT
         else
           echo '::warning::No changes detected. Skipping push.'
         fi
@@ -63,6 +71,7 @@ jobs:
         ACTOR: ${{ github.actor }}
         TRIGGERING_ACTOR: ${{ github.triggering_actor }}
     - name: Push to branch
+      if: ${{ steps.update.outputs.commit == "y" }}
       uses: MithrilJS/push-protected@main
       with:
         token: ${{ secrets.PACKAGE_UPDATE_TOKEN }}
