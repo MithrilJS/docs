@@ -31,9 +31,11 @@ jobs:
       run: node -e "$SCRIPT"
       env:
         PKG: ${{ inputs.package }}
-        VERSION: ${{ steps.view.version }}
+        VERSION: ${{ steps.view.outputs.version }}
         SCRIPT: |
           const {PKG, VERSION} = process.env
+          if (!PKG) throw new Error("Missing $PKG")
+          if (!VERSION) throw new Error("Missing $VERSION")
           const pkg = JSON.parse(fs.readFileSync("package.json"))
           pkg.dependencies[PKG] = VERSION
           fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2))
@@ -54,6 +56,6 @@ jobs:
         fi
       env:
         PKG: ${{ inputs.package }}
-        VERSION: ${{ steps.view.version }}
+        VERSION: ${{ steps.view.outputs.version }}
         ACTOR: ${{ github.actor }}
         TRIGGERING_ACTOR: ${{ github.triggering_actor }}
