@@ -32,7 +32,7 @@ jobs:
       env:
         PKG: ${{ inputs.package }}
         VERSION: ${{ steps.view.version }}
-        SCRIPT: >
+        SCRIPT: |
           const {PKG, VERSION} = process.env
           const pkg = JSON.parse(fs.readFileSync("package.json"))
           pkg.dependencies[PKG] = VERSION
@@ -42,7 +42,7 @@ jobs:
       env:
         PKG: ${{ inputs.package }}
     - name: Commit and push changes
-      run: >
+      run: |
         set -euo pipefail
         if git diff-index --quiet --cached HEAD; then
           echo '::warning::No changes detected. Skipping push.'
