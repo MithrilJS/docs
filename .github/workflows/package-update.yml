@@ -49,12 +49,12 @@ jobs:
             console.log("Package version updated.")
           }
     - name: Update package-lock.json
-      if: ${{ steps.update.outputs.commit == "y" }}
+      if: ${{ steps.update.outputs.commit == 'y' }}
       run: npm update "$PKG" --lock-file-only
       env:
         PKG: ${{ inputs.package }}
     - name: Commit changes
-      if: ${{ steps.update.outputs.commit == "y" }}
+      if: ${{ steps.update.outputs.commit == 'y' }}
       id: commit
       run: |
         set -euo pipefail
@@ -71,7 +71,7 @@ jobs:
         ACTOR: ${{ github.actor }}
         TRIGGERING_ACTOR: ${{ github.triggering_actor }}
     - name: Push to branch
-      if: ${{ steps.update.outputs.commit == "y" }}
+      if: ${{ steps.update.outputs.commit == 'y' }}
       uses: MithrilJS/push-protected@main
       with:
         token: ${{ secrets.PACKAGE_UPDATE_TOKEN }}
