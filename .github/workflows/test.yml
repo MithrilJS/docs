@@ -4,7 +4,7 @@ on:
   pull_request_target:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, 'push-action/**']
   workflow_dispatch:
 
 permissions:
