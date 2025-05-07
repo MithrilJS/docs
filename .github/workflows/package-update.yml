@@ -12,7 +12,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   update:
@@ -45,14 +44,16 @@ jobs:
       run: npm update "$PKG" --lock-file-only
       env:
         PKG: ${{ inputs.package }}
-    - name: Commit and push changes
+    - name: Commit changes
+      id: commit
       run: |
         set -euo pipefail
+        echo commit=n > $GITHUB_OUTPUT
         if git add package.json package-lock.json; then
           git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
           git config --global user.email "$ACTOR@users.noreply.github.com"
           git commit --message "Update $PKG to $VERSION"
-          git push --force
+          echo commit=y > $GITHUB_OUTPUT
         else
           echo '::warning::No changes detected. Skipping push.'
         fi
@@ -61,4 +62,7 @@ jobs:
         VERSION: ${{ steps.view.outputs.version }}
         ACTOR: ${{ github.actor }}
         TRIGGERING_ACTOR: ${{ github.triggering_actor }}
-        GH_TOKEN: ${{ github.token }}
+    - name: Push to branch
+      uses: MithrilJS/push-protected@main
+      with:
+        token: ${{ secrets.PACKAGE_UPDATE_TOKEN }}
