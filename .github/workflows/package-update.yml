@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update:
@@ -51,7 +52,7 @@ jobs:
           git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
           git config --global user.email "$ACTOR@users.noreply.github.com"
           git commit --message "Update $PKG to $VERSION"
-          git push --force
+          gh pr create --fill --label automated
         else
           echo '::warning::No changes detected. Skipping push.'
         fi
