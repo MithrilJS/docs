@@ -37,8 +37,9 @@ jobs:
           if (!PKG) throw new Error("Missing $PKG")
           if (!VERSION) throw new Error("Missing $VERSION")
           const pkg = JSON.parse(fs.readFileSync("package.json"))
+          console.log(`old version=${pkg.dependencies[PKG]}`)
           pkg.dependencies[PKG] = VERSION
-          fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2))
+          fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2)+"\n")
     - name: Update package-lock.json
       run: npm update "$PKG" --lock-file-only
       env:
@@ -46,13 +47,13 @@ jobs:
     - name: Commit and push changes
       run: |
         set -euo pipefail
-        if git diff-index --quiet --cached HEAD; then
-          echo '::warning::No changes detected. Skipping push.'
-        else
+        if git add package.json package-lock.json; then
           git config --global user.name "$ACTOR (on behalf of $TRIGGERING_ACTOR)"
           git config --global user.email "$ACTOR@users.noreply.github.com"
-          git commit --all --message "Update $PKG to $VERSION"
+          git commit --message "Update $PKG to $VERSION"
           git push
+        else
+          echo '::warning::No changes detected. Skipping push.'
         fi
       env:
         PKG: ${{ inputs.package }}
