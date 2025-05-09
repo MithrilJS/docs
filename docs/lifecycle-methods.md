@@ -214,7 +214,7 @@ Typically performance problems that can be fixed via `onbeforeupdate` boil down 
 
 If you do have a performance issue, first consider whether the UI presents a good user experience and change it if it doesn't. For example, it's highly unlikely that a user would ever sift through 5000 rows of raw table data, and highly likely that it would be easier for a user to use a search feature that returns only the top few most relevant items.
 
-If a design-based solution is not feasible, and you must optimize a UI with a large number of DOM element, apply `onbeforeupdate` on the parent node of the largest array and re-evaluate performance. In the vast majority of cases, a single check should be sufficient. In the rare case that it is not, rinse and repeat, but you should be increasingly wary of each new `onbeforeupdate` declaration. Multiple `onbeforeupdate`s are a code smell that indicates prioritization problems in the design workflow.
+If a design-based solution is not feasible, and you must optimize a UI with a large number of DOM elements, apply `onbeforeupdate` on the parent node of the largest array and re-evaluate performance. In the vast majority of cases, a single check should be sufficient. In the rare case that it is not, rinse and repeat, but you should be increasingly wary of each new `onbeforeupdate` declaration. Multiple `onbeforeupdate`s are a code smell that indicates prioritization problems in the design workflow.
 
 Avoid applying the optimization to other areas of your application "just-in-case". Remember that, generally speaking, more code incurs a higher maintenance cost than less code, and `onbeforeupdate` related bugs can be especially difficult to troubleshoot if you rely on object identity for its conditional checks.
 
