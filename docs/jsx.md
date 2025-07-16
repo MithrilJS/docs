@@ -5,9 +5,12 @@ Explanation, examples, and build notes on how to use JSX in your Mithril.js-base
 # JSX
 
 -   [Description](#description)
--   [Setup](#setup)
+-   [Setup JSX](#setup-jsx)
 -   [Production build](#production-build)
 -   [Using Babel with Webpack](#using-babel-with-webpack)
+-   [Setup TSX](#setup-tsx-jsx-in-typescript)
+-   [Enabling Fragments](#enable-fragments)
+-   [Using Closure Components in TSX](#using-closure-components-in-tsx)
 -   [Differences with React](#differences-with-react)
 -   [JSX vs hyperscript](#jsx-vs-hyperscript)
 -   [Tips and Tricks](#tips-and-tricks)
@@ -58,9 +61,9 @@ m.render(document.body, <MyComponent />)
 
 ---
 
-### Setup
+### Setup JSX
 
-The simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin.
+When using JavaScript, the simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin. When using using [TypeScript](https://www.typescriptlang.org/) follow the [instructions below](#setup-tsx-jsx-in-typescript)
 
 Babel requires npm, which is automatically installed when you install [Node.js](https://nodejs.org/en/). Once npm is installed, create a project folder and run this command:
 
@@ -240,6 +243,118 @@ Then create a new plugin in the `plugins` property of the Webpack configuration 
 See [the Webpack docs](https://webpack.js.org/plugins/provide-plugin/) for more information on `ProvidePlugin`.
 
 ---
+
+### Setup TSX (JSX in TypeScript)
+
+Since TypeScript is already transpiled, Babel is not necessary. All you need to do is tell TypeScript how to handle JSX code correctly (more information about JSX in TypeScript [here](https://www.typescriptlang.org/docs/handbook/jsx.html)).
+
+Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "m"
+  }
+}
+```
+
+This setup should be enough to get most JSX functionality working. But there are a few gotchas that you might want to fix as well:
+
+#### Enabling Fragments
+
+With the setup above, you will not be able to use Fragments (e.g. `<>bla</>`).
+To enable Fragments, first add `jsxFragmentFactory` to `compilerOptions` in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "jsxFragmentFactory": "m.fragment"
+  }
+}
+```
+`m.fragment` also needs to be defined globally. The easiest way of doing that, is adding the following line to the entry point of your application (depending on your project structure, that might be `src/index.ts`):
+
+```typescript
+m.fragment = { view: (vNode: Vnode) => vNode.children } as any;
+```
+
+#### Using Closure Components in TSX
+When using [Closure Components](components.md#closure-component-state) in JSX, TypeScript only expects an attribute object as a parameter for a Function Component. But Mithril provides a `Vnode` object instead. This leads to the IDE showing faulty parameters even though the JSX would compile correctly.
+
+Example:
+The following code will compile correctly but show this error:
+```
+TS2739: Type { greet: string; } is missing the following properties from type Vnode<{}, {}>: tag, attrs, state
+TS2786: LoadingSpinner cannot be used as a JSX component.
+```
+
+```typescript jsx
+interface Attributes {
+  greet: string
+}
+function ChildComponent(vNode: Vnode<Attributes>): m.Component<Attributes> {
+  return {
+    view: <div>{vNode.attrs.greet}</div>
+  };
+}
+
+function ParentComponent() {
+  return {
+    view: <div><ChildComponent greet="Hello World"/></div> //This line will compile correctly but shows the errors above 
+  };
+}
+```
+
+There are several options to circumvent that problem:
+1) Instead of `<div><ChildComponent greet="Hello World"/></div>`, use `<div>{m(ChildComponent, {greet: "Hello World"})}</div>` instead.
+2) Use [Class Components](components.md#class-component-state) instead. Class Components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
+3) Create a "translation function" (see `TranslatedComponent()` in the example below) to trick TypeScript.
+
+The following code will work without errors:
+
+```typescript jsx
+/**
+ * Use TranslatedComponent to create Closure Components that can be inspected by TypeScript.
+ */
+export function TranslatedComponent<T>(create: m.ClosureComponent<T>) {
+  return (attrs: T) => {
+    const vNode = attrs as m.Vnode<T>;
+    return create(vNode) as unknown as JSX.Element;
+  }
+}
+
+
+interface Attributes {
+  greet: string
+}
+//We slightly altered the definition of ChildComponent by using TranslatedComponent()
+const ChildComponent = TranslationdComponent<Attributes>(vNode => {
+  return {
+    view: <div>{vNode.attrs.greet}</div>
+  };
+})
+
+function ParentComponent() {
+  return {
+    view: <div><ChildComponent greet="Hello World"/></div>
+  };
+}
+
+```
+
+When you need generics for your closure component, you can use the following definition style:
+
+```typescript jsx
+function ChildComponentImpl<T>() {
+  ...
+}
+
+const ChildComponent = TranslatedComponent(ChildComponentImpl); //for TranslatedComponent, see above
+
+const jsx = <div><ChildComponent<SomeClass>/></div>
+```
+
 
 ### Differences with React
 
