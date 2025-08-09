@@ -262,9 +262,10 @@ Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
 This setup should be enough to get most JSX functionality working.
 
 #### Using closure components in TSX
-Because of https://github.com/microsoft/TypeScript/issues/21699, we advise against using [closure components](components.md#closure-component-state) in TypeScript. Either use [class components](components.md#class-component-state) or Hyperscript instead (see a list of alternatives below).
-If you really want to use them, you have to add a simple hack to trick the TypeScript error checking to resolve faulty errors.
-When using closure components in JSX, TypeScript only expects an attribute object as a parameter. But Mithril.js provides a `Vnode` object instead. This leads to the editor showing faulty parameters even though the JSX would compile correctly.
+>Because of https://github.com/microsoft/TypeScript/issues/21699, we advise against using [closure components](components.md#closure-component-state) in TypeScript for now. Either use [class components](components.md#class-component-state) without attribute inspection or Hyperscript instead (see the list of alternatives below the code example).
+
+TypeScript only expects an attribute object as a parameter. But Mithril.js provides a `Vnode` object instead. This leads to the editor showing faulty parameters even though the JSX would compile correctly. If you want to use closure components in TypeScript, you need to trick the TypeScript error checking.
+
 
 For example, if you try to compile this code:
 
@@ -280,7 +281,7 @@ function ChildComponent(vNode: Vnode<Attributes>): m.Component<Attributes> {
 
 function ParentComponent() {
   return {
-    view: <div><ChildComponent greet="Hello World"/></div> //This line will compile correctly but shows the errors above 
+    view: <div><ChildComponent greet="Hello World"/></div> //This line will compile correctly but shows the errors bellow 
   };
 }
 ```
