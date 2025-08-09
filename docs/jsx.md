@@ -9,7 +9,6 @@ Explanation, examples, and build notes on how to use JSX in your Mithril.js-base
 -   [Production build](#production-build)
 -   [Using Babel with Webpack](#using-babel-with-webpack)
 -   [Setup TSX](#setup-tsx-jsx-in-typescript)
--   [Enabling Fragments](#enable-fragments)
 -   [Using Closure Components in TSX](#using-closure-components-in-tsx)
 -   [Differences with React](#differences-with-react)
 -   [JSX vs hyperscript](#jsx-vs-hyperscript)
@@ -254,30 +253,13 @@ Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
 {
   "compilerOptions": {
     "jsx": "react",
-    "jsxFactory": "m"
+    "jsxFactory": "m",
+    "jsxFragmentFactory": "m.Fragment"
   }
 }
 ```
 
-This setup should be enough to get most JSX functionality working. But there are a few gotchas that you might want to fix as well:
-
-#### Enabling Fragments
-
-With the setup above, you will not be able to use Fragments (e.g. `<>bla</>`).
-To enable Fragments, first add `jsxFragmentFactory` to `compilerOptions` in your `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "jsxFragmentFactory": "m.fragment"
-  }
-}
-```
-`m.fragment` also needs to be defined globally. The easiest way of doing that, is adding the following line to the entry point of your application (depending on your project structure, that might be `src/index.ts`):
-
-```typescript
-m.fragment = { view: (vNode: Vnode) => vNode.children } as any;
-```
+This setup should be enough to get most JSX functionality working.
 
 #### Using Closure Components in TSX
 When using [Closure Components](components.md#closure-component-state) in JSX, TypeScript only expects an attribute object as a parameter for a Function Component. But Mithril provides a `Vnode` object instead. This leads to the IDE showing faulty parameters even though the JSX would compile correctly.
