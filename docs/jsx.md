@@ -320,10 +320,9 @@ The following code will work without errors:
  * Use TranslatedComponent to create Closure Components that can be inspected by TypeScript.
  */
 export function TranslatedComponent<T>(create: m.ClosureComponent<T>) {
-  return (attrs: T) => {
-    const vNode = attrs as m.Vnode<T>;
-    return create(vNode) as unknown as JSX.Element;
-  }
+  return create as any as (
+    (attrs: T & Mithril.CommonAttributes<T, unknown>) => JSX.Element
+  )
 }
 
 
