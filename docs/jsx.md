@@ -293,17 +293,17 @@ TS2786: LoadingSpinner cannot be used as a JSX component.
 ```
 
 There are several options to circumvent that problem:
-1) Instead of `<div><ChildComponent greet="Hello World"/></div>`, use `<div>{m(ChildComponent, {greet: "Hello World"})}</div>` instead.
-2) Use [Class Components](components.md#class-component-state) instead. Class Components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
-3) Create a "translation function" (see `TranslatedComponent()` in the example below) to trick TypeScript.
+1. Instead of `<div><ChildComponent greet="Hello World"/></div>`, use `<div>{m(ChildComponent, {greet: "Hello World"})}</div>` instead.
+2. Use [class components](components.md#class-component-state) instead. Class components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
+3. Create a "translation function" (see `TsClosureComponent()` in the example below) to trick TypeScript.
 
 The following code will work without errors:
 
 ```typescript jsx
 /**
- * Use TranslatedComponent to create Closure Components that can be inspected by TypeScript.
+ * Use TsClosureComponent to create closure components that can be inspected by TypeScript.
  */
-export function TranslatedComponent<T>(create: m.ClosureComponent<T>) {
+export function TsClosureComponent<T>(create: Mithril.ClosureComponent<T>) {
   return create as any as (
     (attrs: T & Mithril.CommonAttributes<T, unknown>) => JSX.Element
   )
@@ -313,16 +313,16 @@ export function TranslatedComponent<T>(create: m.ClosureComponent<T>) {
 interface Attributes {
   greet: string
 }
-//We slightly altered the definition of ChildComponent by using TranslatedComponent()
-const ChildComponent = TranslationdComponent<Attributes>(vNode => {
+// We slightly altered the definition of `ChildComponent` by using `TsClosureComponent`
+const ChildComponent = TsClosureComponent<Attributes>(vNode => {
   return {
-    view: <div>{vNode.attrs.greet}</div>
+    view: () => <div>{vNode.attrs.greet}</div>
   };
 })
 
 function ParentComponent() {
   return {
-    view: <div><ChildComponent greet="Hello World"/></div>
+    view: () => <div><ChildComponent greet="Hello World"/></div>
   };
 }
 
@@ -332,12 +332,14 @@ When you need generics for your closure component, you can use the following def
 
 ```typescript jsx
 function ChildComponentImpl<T>() {
-  ...
+  // ...
 }
 
-const ChildComponent = TranslatedComponent(ChildComponentImpl); //for TranslatedComponent, see above
+const ChildComponent = TsClosureComponent(ChildComponentImpl); //for TsClosureComponent, see above
 
-const jsx = <div><ChildComponent<SomeClass>/></div>
+const jsx = <div>
+  <ChildComponent<SomeClass> />
+</div>
 ```
 
 
