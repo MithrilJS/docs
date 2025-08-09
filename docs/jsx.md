@@ -282,12 +282,7 @@ m.fragment = { view: (vNode: Vnode) => vNode.children } as any;
 #### Using Closure Components in TSX
 When using [Closure Components](components.md#closure-component-state) in JSX, TypeScript only expects an attribute object as a parameter for a Function Component. But Mithril provides a `Vnode` object instead. This leads to the IDE showing faulty parameters even though the JSX would compile correctly.
 
-Example:
-The following code will compile correctly but show this error:
-```
-TS2739: Type { greet: string; } is missing the following properties from type Vnode<{}, {}>: tag, attrs, state
-TS2786: LoadingSpinner cannot be used as a JSX component.
-```
+For example, if you try to compile this code:
 
 ```typescript jsx
 interface Attributes {
@@ -304,6 +299,13 @@ function ParentComponent() {
     view: <div><ChildComponent greet="Hello World"/></div> //This line will compile correctly but shows the errors above 
   };
 }
+```
+
+TypeScript will report this error:
+
+```
+TS2739: Type { greet: string; } is missing the following properties from type Vnode<{}, {}>: tag, attrs, state
+TS2786: LoadingSpinner cannot be used as a JSX component.
 ```
 
 There are several options to circumvent that problem:
