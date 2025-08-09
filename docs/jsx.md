@@ -261,8 +261,10 @@ Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
 
 This setup should be enough to get most JSX functionality working.
 
-#### Using Closure Components in TSX
-When using [Closure Components](components.md#closure-component-state) in JSX, TypeScript only expects an attribute object as a parameter for a Function Component. But Mithril provides a `Vnode` object instead. This leads to the IDE showing faulty parameters even though the JSX would compile correctly.
+#### Using closure components in TSX
+Because of https://github.com/microsoft/TypeScript/issues/21699, we advise against using [closure components](components.md#closure-component-state) in TypeScript. Either use [class components](components.md#class-component-state) or Hyperscript instead (see a list of alternatives below).
+If you really want to use them, you have to add a simple hack to trick the TypeScript error checking to resolve faulty errors.
+When using closure components in JSX, TypeScript only expects an attribute object as a parameter. But Mithril.js provides a `Vnode` object instead. This leads to the editor showing faulty parameters even though the JSX would compile correctly.
 
 For example, if you try to compile this code:
 
