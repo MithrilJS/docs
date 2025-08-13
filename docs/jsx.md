@@ -290,7 +290,7 @@ TypeScript will report this error:
 
 ```
 TS2739: Type { greet: string; } is missing the following properties from type Vnode<{}, {}>: tag, attrs, state
-TS2786: LoadingSpinner cannot be used as a JSX component.
+TS2786: ChildComponent cannot be used as a JSX component.
 ```
 
 There are several options to circumvent that problem:
