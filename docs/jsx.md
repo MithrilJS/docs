@@ -300,7 +300,7 @@ There are several options to circumvent that problem:
 
 The following code will work without errors:
 
-```typescript jsx
+```tsx
 /**
  * Use TsClosureComponent to create closure components that can be inspected by TypeScript.
  */
