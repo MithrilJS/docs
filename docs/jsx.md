@@ -323,7 +323,9 @@ const ChildComponent = TsClosureComponent<Attributes>(vNode => {
 
 function ParentComponent() {
   return {
-    view: () => <div><ChildComponent greet="Hello World"/></div>
+    view: () => <div>
+      <ChildComponent greet="Hello World"/>
+    </div>
   };
 }
 
