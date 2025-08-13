@@ -269,7 +269,7 @@ TypeScript only expects an attribute object as a parameter. But Mithril.js provi
 
 For example, if you try to compile this code:
 
-```typescript jsx
+```tsx
 interface Attributes {
   greet: string
 }
