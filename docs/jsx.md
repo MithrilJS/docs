@@ -294,7 +294,7 @@ TS2786: LoadingSpinner cannot be used as a JSX component.
 ```
 
 There are several options to circumvent that problem:
-1. Instead of `<div><ChildComponent greet="Hello World"/></div>`, use `<div>{m(ChildComponent, {greet: "Hello World"})}</div>` instead.
+1. Instead of `<div><ChildComponent greet="Hello World"/></div>`, use [hyperscript](hyperscript.md) instead: `<div>{m(ChildComponent, {greet: "Hello World"})}</div>`.
 2. Use [class components](components.md#class-component-state) instead. Class components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
 3. Create a "translation function" (see `TsClosureComponent()` in the example below) to trick TypeScript.
 
