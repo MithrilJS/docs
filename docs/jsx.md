@@ -348,19 +348,19 @@ const jsx = <div>
 
 ### Differences with React
 
-JSX in Mithril.js has some subtle but important differences compared to React's JSX.
+JSX in Mithril.js has some subtle but important differences compared to JSX in React.
 
 #### Attribute and style property case conventions
 
-React requires you use the camel-cased DOM property names instead of HTML attribute names for all attributes other than `data-*` and `aria-*` attributes. For example, with React, you have to use `className` instead of `class` and `htmlFor` instead of `for`. In Mithril.js, it's more idiomatic to use the lowercase HTML attribute names instead. Mithril.js always falls back to `setAttribute` if a property doesn't exist, letting you just always use HTML attributes. Note that in most cases, the DOM property and HTML attribute names are either the same or very similar. For example,  the property names for `value` and `checked` for inputs are the same as the attribute names for them, and the property name for the global `tabindex` HTML attribute is just `tabIndex` property. There's only a few exceptions, like the `className` property for the global `class` attribute and the `htmlFor` property for the `for` HTML form control attribute.
+React requires you use the camel-cased DOM property names instead of HTML attribute names for all attributes other than `data-*` and `aria-*` attributes. For example, with React, you have to use `className` instead of `class` and `htmlFor` instead of `for`. In Mithril.js, it's more idiomatic to use the lowercase HTML attribute names instead. Mithril.js always falls back to `setAttribute` if a property doesn't exist, letting you just always use HTML attributes. Note that in most cases, the DOM property and HTML attribute names are either the same or very similar. For example, the property names for `value` and `checked` for inputs are the same as the attribute names for them, and the property name for the global `tabindex` HTML attribute is just `tabIndex` property. There's only a few exceptions, like the `className` property for the global `class` attribute and the `htmlFor` property for the `for` HTML form control attribute.
 
 Similarly, React always uses the camel-cased style property names exposed in the DOM via properties of `elem.style` (like `cssHeight` and `backgroundColor`). Mithril.js supports both that and the kebab-cased CSS property names (like `height` and `background-color`), and the hyphenated CSS names are the preferred idiom. Only `cssHeight`, `cssFloat`, and some vendor-prefixed properties differ in more than case.
 
 #### DOM events
 
-React upper-cases the first character of all event handlers: `onClick` listens for `click` events and `onSubmit` for `submit` events. Some are further altered as they're multiple words concatenated together. For instance, `onMouseMove` listens for `mousemove` events. Mithril.js does not do this case mapping but instead just prepends `on` to the native event, so you'd add listeners for `onclick` and `onmousemove` to listen to those two events respectively. This corresponds much more closely to HTML's naming scheme and is much more intuitive if you come from an HTML or vanilla DOM background.
+React upper-cases the first character of all event handlers: `onClick` listens for `click` events and `onSubmit` for `submit` events. Some are further altered as their multiple words concatenated together. For instance, `onMouseMove` listens for `mousemove` events. Mithril.js does not do this case mapping but instead just prepends `on` to the native event, so you'd add listeners for `onclick` and `onmousemove` to listen to those two events respectively. This corresponds much more closely to HTML's naming scheme and is much more intuitive if you come from an HTML or vanilla DOM background.
 
-React supports scheduling event listeners during the capture phase (in the first pass, out to in, as opposed to the default bubble phase going in to out in the second pass) by appending `Capture` to that event. Mithril.js currently lacks such functionality, but it could gain this in the future. If this is necessary you can manually add and remove your own listeners in [lifecycle hooks](lifecycle-methods.md).
+React supports scheduling event listeners during the capture phase, as events first descend from the top to their target (as opposed to the bubble phase, when events ascend back out to the top), by appending `Capture` to that event. Mithril.js currently has no equivalent for this. If you need such event listeners, you can manually add and remove your own listeners in [lifecycle hooks](lifecycle-methods.md).
 
 ---
 
