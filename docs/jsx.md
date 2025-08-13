@@ -275,7 +275,7 @@ interface Attributes {
 }
 function ChildComponent(vNode: Vnode<Attributes>): m.Component<Attributes> {
   return {
-    view: <div>{vNode.attrs.greet}</div>
+    view: () => <div>{vNode.attrs.greet}</div>
   };
 }
 
