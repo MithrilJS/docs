@@ -62,7 +62,7 @@ m.render(document.body, <MyComponent />)
 
 ### Setup JSX
 
-When using JavaScript, the simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin. (For TypeScript follow the [instructions below](#setup-tsx-jsx-in-typescript)).
+When using JavaScript, the simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin. (For TypeScript, follow the [instructions below](#setup-tsx-jsx-in-typescript).)
 
 Babel requires npm, which is automatically installed when you install [Node.js](https://nodejs.org/en/). Once npm is installed, create a project folder and run this command:
 
