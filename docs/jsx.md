@@ -281,7 +281,9 @@ function ChildComponent(vNode: Vnode<Attributes>): m.Component<Attributes> {
 
 function ParentComponent() {
   return {
-    view: <div><ChildComponent greet="Hello World"/></div> //This line will compile correctly but shows the errors bellow 
+    view: () => <div>
+      <ChildComponent greet="Hello World"/>
+    </div>
   };
 }
 ```
@@ -293,17 +295,15 @@ TS2739: Type { greet: string; } is missing the following properties from type Vn
 TS2786: ChildComponent cannot be used as a JSX component.
 ```
 
-There are several options to circumvent that problem:
+There are a few options to circumvent that problem:
 1. Instead of `<div><ChildComponent greet="Hello World"/></div>`, use [hyperscript](hyperscript.md) instead: `<div>{m(ChildComponent, {greet: "Hello World"})}</div>`.
 2. Use [class components](components.md#class-component-state) instead. Class components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
-3. Create a "translation function" (see `TsClosureComponent()` in the example below) to trick TypeScript.
+3. Create a "translation function" (like `TsClosureComponent()` in the example below) to trick TypeScript.
 
 The following code will work without errors:
 
 ```tsx
-/**
- * Use TsClosureComponent to create closure components that can be inspected by TypeScript.
- */
+// Use this helper to force TypeScript to treat closure components as valid JSX components
 export function TsClosureComponent<T>(create: Mithril.ClosureComponent<T>) {
   return create as any as (
     (attrs: T & Mithril.CommonAttributes<T, unknown>) => JSX.Element
@@ -331,14 +331,14 @@ function ParentComponent() {
 
 ```
 
-When you need generics for your closure component, you can use the following definition style:
+This also works with generics, as long as you define the generic as part of the wrapped component:
 
 ```typescript jsx
 function ChildComponentImpl<T>() {
   // ...
 }
 
-const ChildComponent = TsClosureComponent(ChildComponentImpl); //for TsClosureComponent, see above
+const ChildComponent = TsClosureComponent(ChildComponentImpl);
 
 const jsx = <div>
   <ChildComponent<SomeClass> />
