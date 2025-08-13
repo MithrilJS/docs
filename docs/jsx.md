@@ -243,9 +243,9 @@ See [the Webpack docs](https://webpack.js.org/plugins/provide-plugin/) for more 
 
 ---
 
-### Setup TSX (JSX in TypeScript)
+### Setup for TypeScript
 
-When using [TypeScript](https://www.typescriptlang.org/), all you need to do is tell TypeScript how to handle JSX code correctly. Since TypeScript can transpile JSX and TSX on its own, you don't need any other tools like Babel to do it for you. (More information can be found about JSX in TypeScript [here](https://www.typescriptlang.org/docs/handbook/jsx.html).)
+When using [TypeScript](https://www.typescriptlang.org/), all you need to do is tell TypeScript how to handle JSX code correctly. Since TypeScript can transpile JSX on its own, you don't need any other tools like Babel to do it for you. (More information can be found [here](https://www.typescriptlang.org/docs/handbook/jsx.html).)
 
 Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
 
