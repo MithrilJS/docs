@@ -5,9 +5,11 @@ Explanation, examples, and build notes on how to use JSX in your Mithril.js-base
 # JSX
 
 -   [Description](#description)
--   [Setup](#setup)
+-   [Setup for JavaScript](#setup-for-javascript)
 -   [Production build](#production-build)
 -   [Using Babel with Webpack](#using-babel-with-webpack)
+-   [Setup for TypeScript](#setup-for-typescript)
+-   [Using Closure Components in TypeScript with JSX](#using-closure-components-in-typescript-with-jsx)
 -   [Differences with React](#differences-with-react)
 -   [JSX vs hyperscript](#jsx-vs-hyperscript)
 -   [Tips and Tricks](#tips-and-tricks)
@@ -58,9 +60,9 @@ m.render(document.body, <MyComponent />)
 
 ---
 
-### Setup
+### Setup for JavaScript
 
-The simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin.
+When using JavaScript, the simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin. (For TypeScript, follow the [instructions below](#setup-tsx-jsx-in-typescript).)
 
 Babel requires npm, which is automatically installed when you install [Node.js](https://nodejs.org/en/). Once npm is installed, create a project folder and run this command:
 
@@ -241,21 +243,124 @@ See [the Webpack docs](https://webpack.js.org/plugins/provide-plugin/) for more 
 
 ---
 
+### Setup for TypeScript
+
+When using [TypeScript](https://www.typescriptlang.org/), all you need to do is tell TypeScript how to handle JSX code correctly. Since TypeScript can transpile JSX on its own, you don't need any other tools like Babel to do it for you. (More information can be found [here](https://www.typescriptlang.org/docs/handbook/jsx.html).)
+
+Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "m",
+    "jsxFragmentFactory": "m.Fragment"
+  }
+}
+```
+
+This setup should be enough to get most JSX functionality working.
+
+#### Using closure components in TypeScript with JSX
+>Because of https://github.com/microsoft/TypeScript/issues/21699, we advise against using [closure components](components.md#closure-component-state) in TypeScript for now. Either use [class components](components.md#class-component-state) without attribute inspection or Hyperscript instead (see the list of alternatives below the code example).
+
+TypeScript only expects an attribute object as a parameter. But Mithril.js provides a `Vnode` object instead. This leads to the editor showing faulty parameters even though the JSX would compile correctly. If you want to use closure components in TypeScript, you need to trick the TypeScript error checking.
+
+
+For example, if you try to compile this code:
+
+```tsx
+interface Attributes {
+  greet: string
+}
+function ChildComponent(vNode: Vnode<Attributes>): m.Component<Attributes> {
+  return {
+    view: () => <div>{vNode.attrs.greet}</div>
+  };
+}
+
+function ParentComponent() {
+  return {
+    view: () => <div>
+      <ChildComponent greet="Hello World"/>
+    </div>
+  };
+}
+```
+
+TypeScript will report this error:
+
+```
+TS2739: Type { greet: string; } is missing the following properties from type Vnode<{}, {}>: tag, attrs, state
+TS2786: ChildComponent cannot be used as a JSX component.
+```
+
+There are a few options to circumvent that problem:
+1. Instead of `<div><ChildComponent greet="Hello World"/></div>`, use [hyperscript](hyperscript.md) instead: `<div>{m(ChildComponent, {greet: "Hello World"})}</div>`.
+2. Use [class components](components.md#class-component-state) instead. Class components will not show any errors. But TypeScript will not be able to autocomplete or inspect attributes (in this example `greet` would be unknown when used in `ParentComponent`).
+3. Create a "translation function" (like `TsClosureComponent()` in the example below) to trick TypeScript.
+
+The following code will work without errors:
+
+```tsx
+// Use this helper to force TypeScript to treat closure components as valid JSX components
+export function TsClosureComponent<T>(create: Mithril.ClosureComponent<T>) {
+  return create as any as (
+    (attrs: T & Mithril.CommonAttributes<T, unknown>) => JSX.Element
+  )
+}
+
+
+interface Attributes {
+  greet: string
+}
+// We slightly altered the definition of `ChildComponent` by using `TsClosureComponent`
+const ChildComponent = TsClosureComponent<Attributes>(vNode => {
+  return {
+    view: () => <div>{vNode.attrs.greet}</div>
+  };
+})
+
+function ParentComponent() {
+  return {
+    view: () => <div>
+      <ChildComponent greet="Hello World"/>
+    </div>
+  };
+}
+
+```
+
+This also works with generics, as long as you define the generic as part of the wrapped component:
+
+```typescript jsx
+function ChildComponentImpl<T>() {
+  // ...
+}
+
+const ChildComponent = TsClosureComponent(ChildComponentImpl);
+
+const jsx = <div>
+  <ChildComponent<SomeClass> />
+</div>
+```
+
+
 ### Differences with React
 
-JSX in Mithril has some subtle but important differences compared to React's JSX.
+JSX in Mithril.js has some subtle but important differences compared to JSX in React.
 
 #### Attribute and style property case conventions
 
-React requires you use the camel-cased DOM property names instead of HTML attribute names for all attributes other than `data-*` and `aria-*` attributes. For example using `className` instead of `class` and `htmlFor` instead of `for`. In Mithril, it's more idiomatic to use the lowercase HTML attribute names instead. Mithril always falls back to setting attributes if a property doesn't exist which aligns more intuitively with HTML. Note that in most cases, the DOM property and HTML attribute names are either the same or very similar. For example `value`/`checked` for inputs and the `tabindex` global attribute vs the `elem.tabIndex` property on HTML elements. Very rarely do they differ beyond case: the `elem.className` property for the `class` attribute or the `elem.htmlFor` property for the `for` attribute are among the few exceptions.
+React requires you use the camel-cased DOM property names instead of HTML attribute names for all attributes other than `data-*` and `aria-*` attributes. For example, with React, you have to use `className` instead of `class` and `htmlFor` instead of `for`. In Mithril.js, it's more idiomatic to use the lowercase HTML attribute names instead. Mithril.js always falls back to `setAttribute` if a property doesn't exist, letting you just always use HTML attributes. Note that in most cases, the DOM property and HTML attribute names are either the same or very similar. For example, the property names for `value` and `checked` for inputs are the same as the attribute names for them, and the property name for the global `tabindex` HTML attribute is just `tabIndex` property. There's only a few exceptions, like the `className` property for the global `class` attribute and the `htmlFor` property for the `for` HTML form control attribute.
 
-Similarly, React always uses the camel-cased style property names exposed in the DOM via properties of `elem.style` (like `cssHeight` and `backgroundColor`). Mithril supports both that and the kebab-cased CSS property names (like `height` and `background-color`) and idiomatically prefers the latter. Only `cssHeight`, `cssFloat`, and vendor-prefixed properties differ in more than case.
+Similarly, React always uses the camel-cased style property names exposed in the DOM via properties of `elem.style` (like `cssHeight` and `backgroundColor`). Mithril.js supports both that and the kebab-cased CSS property names (like `height` and `background-color`), and the hyphenated CSS names are the preferred idiom. Only `cssHeight`, `cssFloat`, and some vendor-prefixed properties differ in more than case.
 
 #### DOM events
 
-React upper-cases the first character of all event handlers: `onClick` listens for `click` events and `onSubmit` for `submit` events. Some are further altered as they're multiple words concatenated together. For instance, `onMouseMove` listens for `mousemove` events. Mithril does not do this case mapping but instead just prepends `on` to the native event, so you'd add listeners for `onclick` and `onmousemove` to listen to those two events respectively. This corresponds much more closely to HTML's naming scheme and is much more intuitive if you come from an HTML or vanilla DOM background.
+React upper-cases the first character of all event handlers: `onClick` listens for `click` events and `onSubmit` for `submit` events. Some are further altered as their multiple words concatenated together. For instance, `onMouseMove` listens for `mousemove` events. Mithril.js does not do this case mapping but instead just prepends `on` to the native event, so you'd add listeners for `onclick` and `onmousemove` to listen to those two events respectively. This corresponds much more closely to HTML's naming scheme and is much more intuitive if you come from an HTML or vanilla DOM background.
 
-React supports scheduling event listeners during the capture phase (in the first pass, out to in, as opposed to the default bubble phase going in to out in the second pass) by appending `Capture` to that event. Mithril currently lacks such functionality, but it could gain this in the future. If this is necessary you can manually add and remove your own listeners in [lifecycle hooks](lifecycle-methods.md).
+React supports scheduling event listeners during the capture phase, as events first descend from the top to their target (as opposed to the bubble phase, when events ascend back out to the top), by appending `Capture` to that event. Mithril.js currently has no equivalent for this. If you need such event listeners, you can manually add and remove your own listeners in [lifecycle hooks](lifecycle-methods.md).
 
 ---
 
