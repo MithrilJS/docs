@@ -5,11 +5,11 @@ Explanation, examples, and build notes on how to use JSX in your Mithril.js-base
 # JSX
 
 -   [Description](#description)
--   [Setup JSX](#setup-jsx)
+-   [Setup for JavaScript](#setup-for-javascript)
 -   [Production build](#production-build)
 -   [Using Babel with Webpack](#using-babel-with-webpack)
--   [Setup TSX](#setup-tsx-jsx-in-typescript)
--   [Using Closure Components in TSX](#using-closure-components-in-tsx)
+-   [Setup for TypeScript](#setup-for-typescript)
+-   [Using Closure Components in TypeScript with JSX](#using-closure-components-in-typescript-with-jsx)
 -   [Differences with React](#differences-with-react)
 -   [JSX vs hyperscript](#jsx-vs-hyperscript)
 -   [Tips and Tricks](#tips-and-tricks)
@@ -60,7 +60,7 @@ m.render(document.body, <MyComponent />)
 
 ---
 
-### Setup JSX
+### Setup for JavaScript
 
 When using JavaScript, the simplest way to use JSX is via a [Babel](https://babeljs.io/) plugin. (For TypeScript, follow the [instructions below](#setup-tsx-jsx-in-typescript).)
 
@@ -261,7 +261,7 @@ Add `jsx` and `jsxFactory` to `compilerOptions` in your `tsconfig.json`:
 
 This setup should be enough to get most JSX functionality working.
 
-#### Using closure components in TSX
+#### Using closure components in TypeScript with JSX
 >Because of https://github.com/microsoft/TypeScript/issues/21699, we advise against using [closure components](components.md#closure-component-state) in TypeScript for now. Either use [class components](components.md#class-component-state) without attribute inspection or Hyperscript instead (see the list of alternatives below the code example).
 
 TypeScript only expects an attribute object as a parameter. But Mithril.js provides a `Vnode` object instead. This leads to the editor showing faulty parameters even though the JSX would compile correctly. If you want to use closure components in TypeScript, you need to trick the TypeScript error checking.
