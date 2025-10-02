@@ -117,6 +117,9 @@ export async function makeGenerator() {
 		// fix links
 		body = body.replace(/\]\((?!\w+:\/\/)(.+?)\.md([)#])/gim, "]($1.html$2")
 
+		// update version
+		body = body.replaceAll("[version]", versions.mithril)
+
 		let markedHtml = marked(body)
 
 		// inject anchors
