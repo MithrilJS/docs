@@ -95,10 +95,10 @@ var Article = {
 	}
 }
 
-m.route(document.body, {
-	'/article/:articleid': Article
+m.route(document.body, "/article/1", {
+	"/article/:articleid": Article
 })
-m.route.set('/article/:articleid', {articleid: 1})
+m.route.set("/article/:articleid", {articleid: 1})
 ```
 
 ##### m.route.get
