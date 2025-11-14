@@ -48,10 +48,6 @@ Mithril.js is used by companies like Vimeo and Nike, and open source platforms l
 
 If you are an experienced developer and want to know how Mithril.js compares to other frameworks, see the [framework comparison](framework-comparison.md) page.
 
-Mithril.js supports IE11, Firefox ESR, and the last two versions of Firefox, Edge, Safari, and Chrome. No polyfills required.
-
-*Looking for the v1 docs? [Click here](https://mithril.js.org/archive/v1.1.7/index.html).*
-
 ---
 
 ### Getting started
